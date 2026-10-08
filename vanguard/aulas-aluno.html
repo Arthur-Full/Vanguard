@@ -25,70 +25,83 @@
 
             <nav class="side-nav" aria-label="Navegação principal">
                 <a href="#" class="nav-item">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4v-7H9v7H5a1 1 0 0 1-1-1z"/></svg>
-                    <span>Dashboard</span>
+                    <img src="imagem/casa-branca.png" alt="" aria-hidden="true">
+                    <span>DashBoard</span>
                 </a>
                 <a href="#" class="nav-item">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 9h18"/></svg>
+                    <img src="imagem/calendario-01.png" alt="" aria-hidden="true">
                     <span>Calendário</span>
                 </a>
                 <a href="#" class="nav-item active">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11A2.5 2.5 0 0 1 17.5 20h-11A2.5 2.5 0 0 1 4 17.5zm3 1.5h10M7 11h10M7 15h7"/></svg>
+                    <img src="imagem/livro_01.png" alt="" aria-hidden="true">
                     <span>Aulas</span>
                 </a>
                 <a href="#" class="nav-item">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.3-3.3 4-5 8-5s6.7 1.7 8 5"/></svg>
+                    <img src="imagem/perfil.png" alt="" aria-hidden="true">
                     <span>Perfil</span>
                 </a>
             </nav>
         </aside>
 
-        <main class="content-area">
-            <div class="content-panel">
-                <h2 class="section-heading">Salas</h2>
-                <div class="room-tabs" aria-label="Salas">
-                    <button class="tab">Segunda <span>SOP</span></button>
-                    <button class="tab">Terça <span>ARI</span></button>
-                    <button class="tab">Quarta <span>LOPAL</span></button>
-                    <button class="tab">Quinta <span>BCD</span></button>
-                    <button class="tab">Sexta <span>BKN</span></button>
-                </div>
+        <div class="main-column">
+            <header class="topbar">
+                <a href="#" class="logout" aria-label="Sair">
+                    <img src="imagem/exit.png" alt="" aria-hidden="true">
+                </a>
+            </header>
 
-                <section class="notes-panel" aria-labelledby="anotacoes-title">
-                    <h2 id="anotacoes-title"><span>Anotações</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5h8a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V8a3 3 0 0 1 3-3Zm0 7h8M8 11V8m8 8v-3"/></svg></h2>
-                    <div class="notes-grid">
-                        <article class="note-card add-card" aria-label="Adicionar anotação">
-                            <span class="plus-sign">+</span>
-                        </article>
-
-                        <article class="note-card">
-                            <p>Projeto de <br>Software</p>
-                        </article>
-
-                        <article class="note-card">
-                            <p>Atividade de <br>Arquitetura de<br>Redes</p>
-                        </article>
-
-                        <article class="note-card">
-                            <p>Trabalho de <br>Back End</p>
-                        </article>
-
-                        <article class="note-card">
-                            <p>Trabalho de <br>Front End</p>
-                        </article>
-
-                        <article class="note-card">
-                            <p>Atividade de <br>Sistemas<br>Operacionais</p>
-                        </article>
+            <main class="content-area">
+                <div class="content-panel">
+                    <h2 class="section-heading">Salas</h2>
+                    <div class="room-tabs" aria-label="Salas">
+                        <button class="tab">Segunda <span>SOP</span></button>
+                        <button class="tab">Terça <span>ARI</span></button>
+                        <button class="tab">Quarta <span>LOPAL</span></button>
+                        <button class="tab">Quinta <span>BCD</span></button>
+                        <button class="tab">Sexta <span>BKN</span></button>
                     </div>
-                </section>
 
-                <section class="attachments-panel" aria-labelledby="anexos-title">
-                    <h2 id="anexos-title"><span>Anexos</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 8.5 15.5 3a4 4 0 1 1 5.7 5.7L9.1 18.4a5.4 5.4 0 1 1-7.6-7.7l7.7-7.7"/></svg></h2>
-                    <button class="add-attachment" type="button">Adicionar anexo</button>
-                </section>
-            </div>
-        </main>
+                    <section class="notes-panel" aria-labelledby="anotacoes-title">
+                        <h2 id="anotacoes-title"><span>Anotações</span><img src="imagem/anotacoes.png" alt="" aria-hidden="true"></h2>
+                        <div class="notes-grid">
+                            <article class="note-card add-card" aria-label="Adicionar anotação">
+                                <span class="plus-sign">+</span>
+                            </article>
+
+                            <article class="note-card empty-card"></article>
+                            <article class="note-card empty-card"></article>
+                            <article class="note-card empty-card"></article>
+                            <article class="note-card empty-card"></article>
+
+                            <article class="note-card">
+                                <p>Projeto de <br>Software</p>
+                            </article>
+
+                            <article class="note-card">
+                                <p>Atividade de <br>Arquitetura de<br>Redes</p>
+                            </article>
+
+                            <article class="note-card">
+                                <p>Trabalho de <br>Back End</p>
+                            </article>
+
+                            <article class="note-card">
+                                <p>Trabalho de <br>Front End</p>
+                            </article>
+
+                            <article class="note-card">
+                                <p>Atividade de <br>Sistemas<br>Operacionais</p>
+                            </article>
+                        </div>
+                    </section>
+
+                    <section class="attachments-panel" aria-labelledby="anexos-title">
+                        <h2 id="anexos-title"><span>Anexos</span><img src="imagem/anexo.png" alt="" aria-hidden="true"></h2>
+                        <button class="add-attachment" type="button">Adicionar anexo</button>
+                    </section>
+                </div>
+            </main>
+        </div>
     </div>
 </body>
 </html>
