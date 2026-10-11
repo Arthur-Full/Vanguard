@@ -1,0 +1,53 @@
+body{
+    background-color: #091e0a;
+    margin: 0;
+    display: flex;
+}
+
+.espaco_dash{
+    width: 100%;
+    /* background-color: aquamarine;S */
+}
+
+
+aside{
+     width: 300px;
+    height: 100vh;
+    flex-shrink: 0;
+
+    background-image: url("../Imagem/aside.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+header{
+    height: 100px;
+    width: 100%;
+    background-color: #345252;
+}
+
+.logo{
+    height: 200px;
+    margin-top: 25px;
+}
+
+.icone{
+    margin-top: 8px;
+    height: 35px;
+}
+
+.icone_escola{
+    margin-top: 8px;
+    height: 35px;
+    filter: invert();
+}
+
+.a{
+    display: flex;
+    gap: 15px;
+    padding-left: 15px;
+    /* background-color: red; */
+    color: white;
+  
+}
