@@ -6,10 +6,60 @@ body{
 
 .espaco_dash{
     width: 100%;
-    /* background-color: aquamarine;S */
+    /* background-color: aquamarine; */
+}
+
+.texto{
+    height: 100px;
+    /* width: 100%; */
+    /* background-color: blue; */
+    display: flex;
+    align-items: center;
+    padding-left: 100px;
+    color: #a2c6a2;
+}
+
+span{
+    color: #456b6b;
+}
+
+.espaco_infor{
+    height: 200px;
+    /* width: 100%; */
+    /* background-color: brown; */
+    display: flex;
+    gap: 35px;
+    padding-left: 95px;
+    
+}
+
+.box{
+    height: 170px;
+    width: 345px;
+    background-color: #2c4d3d;
+    border-radius: 10px;
+}
+
+.space{
+    height: 540px;
+    /* width: 100%; */
+    /* background-color: aliceblue; */
+    display: flex;
+    gap: 70px;
+    padding-left: 95px;
+}
+
+.quadrado{
+    height: 500px;
+    width: 700px;
+    background-color: #2c4d3d;
+    border-radius: 15px;
+    border: 3px solid #58888f;
 }
 
 
+
+/* -------aside-------- */
 aside{
      width: 300px;
     height: 100vh;
@@ -35,6 +85,7 @@ header{
 .icone{
     margin-top: 8px;
     height: 35px;
+    filter: invert();
 }
 
 .icone_escola{
