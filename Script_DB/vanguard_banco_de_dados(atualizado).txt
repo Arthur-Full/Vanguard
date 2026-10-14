@@ -1,0 +1,156 @@
+
+CREATE DATABASE IF NOT EXISTS vanguard;
+
+USE vanguard;
+
+-- 1. INSTITUICOES
+CREATE TABLE IF NOT EXISTS instituicoes (
+    id_instituicao INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    cidade VARCHAR(100),
+    cnpj VARCHAR(18) UNIQUE
+);
+
+-- 2. USUARIOS
+CREATE TABLE IF NOT EXISTS usuarios (
+    id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+    id_instituicao INT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    email VARCHAR(150) NOT NULL UNIQUE,
+    senha_hash VARCHAR(255) NOT NULL,
+    tipo_usuario ENUM('aluno', 'professor', 'coordenador')
+        NOT NULL,
+    foto_perfil VARCHAR(255) DEFAULT NULL,
+    data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (id_instituicao)
+        REFERENCES instituicoes(id_instituicao)
+);
+
+-- 3. TURMAS
+CREATE TABLE IF NOT EXISTS turmas (
+    id_turma INT AUTO_INCREMENT PRIMARY KEY,
+    id_instituicao INT NOT NULL,
+    nome VARCHAR(50) NOT NULL,
+    serie VARCHAR(30),
+    curso VARCHAR(60),
+    periodo VARCHAR(20),
+
+    FOREIGN KEY (id_instituicao)
+        REFERENCES instituicoes(id_instituicao)
+);
+
+-- 4. MATRICULAS
+CREATE TABLE IF NOT EXISTS matriculas (
+    id_matricula INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    id_turma INT NOT NULL,
+    data_matricula DATETIME DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'ativa',
+
+    FOREIGN KEY (id_usuario)
+        REFERENCES usuarios(id_usuario)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (id_turma)
+        REFERENCES turmas(id_turma)
+        ON DELETE CASCADE,
+
+    UNIQUE (id_usuario, id_turma)
+);
+
+-- 5. DISCIPLINAS
+CREATE TABLE IF NOT EXISTS disciplinas (
+    id_disciplina INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    descricao VARCHAR(255)
+);
+
+-- 6. PROFESSORES, TURMAS E DISCIPLINAS
+CREATE TABLE IF NOT EXISTS professor_turmas (
+    id_professor_turma INT AUTO_INCREMENT PRIMARY KEY,
+    id_professor INT NOT NULL,
+    id_turma INT NOT NULL,
+    id_disciplina INT NOT NULL,
+
+    FOREIGN KEY (id_professor)
+        REFERENCES usuarios(id_usuario),
+
+    FOREIGN KEY (id_turma)
+        REFERENCES turmas(id_turma)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (id_disciplina)
+        REFERENCES disciplinas(id_disciplina),
+
+    UNIQUE (id_professor, id_turma, id_disciplina)
+);
+
+-- 7. EVENTOS
+CREATE TABLE IF NOT EXISTS eventos (
+    id_evento INT AUTO_INCREMENT PRIMARY KEY,
+    id_instituicao INT NOT NULL,
+    titulo VARCHAR(100) NOT NULL,
+    descricao VARCHAR(255),
+    data_inicio DATETIME NOT NULL,
+    data_fim DATETIME,
+    local VARCHAR(100),
+    publico_alvo VARCHAR(50),
+
+    FOREIGN KEY (id_instituicao)
+        REFERENCES instituicoes(id_instituicao)
+        ON DELETE CASCADE
+);
+
+-- 8. ATIVIDADES
+CREATE TABLE IF NOT EXISTS atividades (
+    id_atividade INT AUTO_INCREMENT PRIMARY KEY,
+    id_professor INT NOT NULL,
+    id_turma INT NOT NULL,
+    titulo VARCHAR(100) NOT NULL,
+    descricao VARCHAR(255),
+    data_inicio DATETIME DEFAULT CURRENT_TIMESTAMP,
+    data_entrega DATETIME,
+
+    FOREIGN KEY (id_professor)
+        REFERENCES usuarios(id_usuario),
+
+    FOREIGN KEY (id_turma)
+        REFERENCES turmas(id_turma)
+        ON DELETE CASCADE
+);
+
+-- 9. ENTREGAS DAS ATIVIDADES
+CREATE TABLE IF NOT EXISTS entregas_atividades (
+    id_entrega INT AUTO_INCREMENT PRIMARY KEY,
+    id_atividade INT NOT NULL,
+    id_aluno INT NOT NULL,
+    conteudo TEXT,
+    arquivo VARCHAR(255),
+    data_entrega DATETIME DEFAULT CURRENT_TIMESTAMP,
+    nota DECIMAL(5,2) DEFAULT NULL,
+    status VARCHAR(20) DEFAULT 'pendente',
+
+    FOREIGN KEY (id_atividade)
+        REFERENCES atividades(id_atividade)
+        ON DELETE CASCADE,
+
+    FOREIGN KEY (id_aluno)
+        REFERENCES usuarios(id_usuario)
+        ON DELETE CASCADE,
+
+    UNIQUE (id_atividade, id_aluno)
+);
+
+-- 10. ANOTACOES
+CREATE TABLE IF NOT EXISTS anotacoes (
+    id_anotacao INT AUTO_INCREMENT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    titulo VARCHAR(100) NOT NULL,
+    conteudo TEXT NOT NULL,
+    data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+    FOREIGN KEY (id_usuario)
+        REFERENCES usuarios(id_usuario)
+        ON DELETE CASCADE
+);
