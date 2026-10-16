@@ -1,0 +1,184 @@
+body {
+    background-image: url(../imagem/Círculos\ pastel\ em\ camadas.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.quadrado {
+    height: 100%;
+    width: 700px;
+    /* background-color: #ff0100; */
+    color: white;
+
+    position: fixed;
+    right: 0;
+    /* margin: px; */
+    margin-top: 0;
+}
+
+input, select {
+    padding-left: 10px;
+    color: white;            
+    font-family: Arial;     
+    font-size: 18px;        
+    font-weight: bold;       
+}
+
+
+
+.Primeira_logo {
+    height: 200px;
+    width: 100%;
+    margin-top: 100px;
+
+    /* background-color: rgb(218, 123, 0); */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img {
+    height: 150px;
+    width: 600px;
+}
+
+.texto {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 0;
+
+}
+
+.texto h1 {
+    margin: 0;
+    font-size: 45px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #377979;
+}
+
+.texto p {
+    margin: 0;
+    font-size: 20px;
+    color: black;
+}
+
+.forms {
+    margin-top: 15px;
+    height: 600px;
+    width: 650px;
+    /* background-color: blueviolet; */
+    display: flex;
+    /* justify-content: center; */
+    flex-direction: column;
+    /* align-items: center; */
+    gap: 25px;
+
+}
+
+
+.espaco_forms {
+    height: 300px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 25px;
+    /* background-color: aqua; */
+}
+
+.primerio_input {
+    display: flex;
+    /* justify-content: center; */
+    /* align-items: center; */
+    flex-direction: column;
+}
+
+.primerio_input h3 {
+    margin: 0;
+}
+
+.tamanho {
+    height: 50px;
+    width: 400px;
+    border-radius: 10px;
+    border: none;
+    background-color: #377979;
+}
+
+.espaco_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    height: 100px;
+    width: 100%;
+    /* background-color: aqua; */
+}
+
+.btn {
+    height: 45px;
+    width: 150px;
+    border-radius: 10px;
+    border: none;
+    font-size: 20px;
+    color: white;
+    background-color: rgb(128, 161, 182);
+    cursor: pointer;
+    transition: 0.3s;
+    border: solid 3px rgb(219, 241, 238);
+}
+
+.btn:hover{
+    background-color: #377979;
+    color:white;
+
+
+}
+
+::placeholder {
+    color: white;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+h3 {
+    color: #377979;
+}
+
+samp {
+    color: red;
+}
+
+.tamanho_select {
+    height: 50px;
+    width: 410px;
+    border-radius: 10px;
+    border: none;
+    background-color: #377979;
+    color: white;
+    font-size: 20px;
+}
+
+.segundo_quadrado {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 500px;
+    width: 500px;
+    /* background-color: black; */
+
+    display: flex;
+    align-items: center;
+
+}
+
+.img_logo{
+    margin-left: 11px;
+    margin-top: 250px;
+    /* height: 200px; */
+    width: 400px;
+}

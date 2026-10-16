@@ -1,0 +1,254 @@
+body{
+    background-color: #091e0a;
+    margin: 0;
+    display: flex;
+}
+
+.espaco_dash{
+    width: 100%;
+    /* background-color: aquamarine; */
+}
+
+.texto{
+    height: 100px;
+    /* width: 100%; */
+    /* background-color: blue; */
+    display: flex;
+    align-items: center;
+    padding-left: 100px;
+    color: #a2c6a2;
+}
+
+span{
+    color: #456b6b;
+}
+
+.espaco_infor{
+    height: 200px;
+    /* width: 100%; */
+    /* background-color: brown; */
+    display: flex;
+    gap: 35px;
+    padding-left: 95px;
+    
+    
+}
+
+.box{
+    height: 170px;
+    width: 345px;
+    background-color: #2c4d3d;
+    border-radius: 10px;  
+    display: flex;
+    gap: 50px;  
+}
+
+.space{
+    height: 540px;
+    /* width: 100%; */
+    /* background-color: aliceblue; */
+    display: flex;
+    gap: 70px;
+    padding-left: 95px;
+}
+
+.quadrado{
+    height: 500px;
+    width: 700px;
+    background-color: #2c4d3d;
+    border-radius: 15px;
+    border: 3px solid #58888f;
+}
+
+/* ---- box ---- */
+
+.bolinha{
+    height: 155px;
+    width: 100px;
+    background-color: #456b6b;
+    /* margin-top: 15px; */
+    /* margin-left: 15px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+        clip-path: polygon(
+        0 0,
+        100% 0,
+        100% 100%,
+        50% 75%,
+        0 100%
+    );
+
+    margin-left: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.school_icone{
+    height: 60px;
+    width: 60px;
+    filter: invert();
+    transform: translateY(-20px);
+}
+
+.dados{
+    display: flex;
+    margin-top: 10px;
+    height: 150px;
+    width: 150px;
+    /* border-radius: 0px 10px 10px 00px; */
+    /* background-color: rgba(228, 238, 234, 0.973); */
+    justify-content: center;
+    align-items: center;
+    color: rgb(237, 245, 239);
+}
+
+.d h1, h3{
+    transform: scale(1.5);
+}
+
+
+/* -------aside-------- */
+
+
+aside{
+     width: 300px;
+    height: 100vh;
+    flex-shrink: 0;
+
+    background-image: url("../Imagem/aside.png");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+header{
+    height: 100px;
+    width: 100%;
+    background-color: #345252;
+}
+
+.logo{
+    height: 200px;
+    margin-top: 25px;
+}
+
+.icone{
+    margin-top: 8px;
+    height: 35px;
+    filter: invert();
+}
+
+.icone_escola{
+    margin-top: 8px;
+    height: 35px;
+    filter: invert();
+}
+
+.a{
+    display: flex;
+    gap: 15px;
+    padding-left: 5px;
+    /* background-color: red; */
+    color: white;
+  
+}
+
+/* ---- informação quadrado ---- */
+
+.titulo{
+    margin-top: 30px;
+    margin-left: 70px;
+    display: flex;
+    align-items: center;
+    color: #d9ffe5;
+}
+
+.texto_{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.texto_ h2{
+    font-size: 50px;
+}
+
+.informacao{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 70px;
+    color: white;
+}
+
+.informacao p{
+    font-size: 25px;
+}
+
+/* ------ ANIMAÇÃO -------- */
+
+
+/* Animação dos itens da sidebar */
+.botao_visaoGeral {
+    margin: 8px 15px;
+    border-radius: 8px;
+    transition: 
+        background-color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+/* Animação ao passar o mouse */
+.botao_visaoGeral:hover {
+    background-color: #456b6b;
+    transform: translateX(8px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Animação dos ícones */
+.botao_visaoGeral .icone,
+.botao_visaoGeral .icone_escola {
+    transition: transform 0.3s ease;
+}
+
+/* Ícone aumenta suavemente */
+.botao_visaoGeral:hover .icone,
+.botao_visaoGeral:hover .icone_escola {
+    transform: scale(1.12);
+}
+
+/* Animação do texto */
+.botao_visaoGeral h2 {
+    transition: color 0.3s ease;
+}
+
+.botao_visaoGeral:hover h2 {
+    color: #d9ffe5;
+}
+
+
+
+.botao_visaoGeral button {
+    width: 100%;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #456b6b;
+    color: white;
+    font-family: inherit;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.botao_visaoGeral button:hover {
+    background-color: #58888f;
+}
