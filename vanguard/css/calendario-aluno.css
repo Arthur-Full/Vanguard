@@ -42,48 +42,73 @@ button {
 }
 
 .caixa-top {
-    width: 210px;
+    width: 170px;
     height: 35px;
-    padding: 2px 0 0 30px;
-    font-size: 20px;
-    border-radius: 10px 10px 0 0;
-    background-color: #00fa85;
+    padding-top: 6px;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 18px 18px 0 0;
+    background-color: var(--teal-light);
 }
 
 .caixa-maior {
+    position: relative;
+    z-index: 1;
     display: grid;
-    align-items: center;
-    justify-content: center;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-auto-rows: minmax(100px, 1fr);
-    width: auto;
-    height: auto;
-    background-color: #0032fa;
+    gap: 50px 30px;
+    padding: 25px 28px 40px;
+    background-color: #d9d9d9;
+    border-radius: 0 20px 20px 20px;
 }
 
 .caixa-dentro {
-    align-items: center;
-    justify-content: center;
-    margin: 25px;
-    width: 250px;
-    height: 250px;
-    background-color: #ff0000;
+    aspect-ratio: 11 / 8;
+    border: 6px solid var(--sidebar-bg);
     border-radius: 10px;
+    overflow: hidden;
+    background-color: #bdbdbd;
+    cursor: pointer;
+}
+
+.caixa-dentro img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .caixa-baixo {
-    width: 100%;
-    height: 200px;
-    padding: 2px 0 0 30px;
-    font-size: 20px;
-    border-radius: 0 0 10px 10px;
-    background-color: #00fa85;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: -20px;
+    min-height: 200px;
+    padding: 50px 40px 30px;
+    text-align: center;
+    border-radius: 0 0 22px 22px;
+    background-color: var(--teal-light);
+}
+
+.caixa-baixo h3 {
+    margin-bottom: 8px;
+    color: #5f8a8c;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.caixa-baixo p {
+    font-size: 11px;
+    font-weight: 700;
 }
 
 .sidebar {
     background-image: url("../imagem/sidebar-user-1.png");
     background-size: cover;
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 20;
     width: 305px;
     flex-shrink: 0;
     padding: 16px 0 24px;
@@ -227,6 +252,8 @@ button {
 }
 
 .main-column {
+    margin-left: 305px;
+    padding-top: 64px;
     flex: 1;
     min-width: 0;
     min-height: 100vh;
@@ -235,6 +262,11 @@ button {
 }
 
 .topbar {
+    position: fixed;
+    top: 0;
+    left: 305px;
+    right: 0;
+    z-index: 10;
     height: 64px;
     flex-shrink: 0;
     background: var(--sidebar-bg);
@@ -457,6 +489,18 @@ button {
         width: 210px;
     }
 
+    .main-column {
+        margin-left: 210px;
+    }
+
+    .topbar {
+        left: 210px;
+    }
+
+    .caixa-maior {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
     .nav-item {
         font-size: 16px;
     }
@@ -477,6 +521,8 @@ button {
     }
 
     .sidebar {
+        position: relative;
+        height: auto;
         width: 100%;
         padding: 10px 16px 16px;
     }
@@ -533,11 +579,23 @@ button {
     }
 
     .main-column {
+        margin-left: 0;
+        padding-top: 0;
         min-height: auto;
     }
 
     .topbar {
+        position: static;
         height: 52px;
+    }
+
+    .caixa-maior {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .caixa-baixo {
+        grid-template-columns: 1fr;
     }
 
     .content-area {
