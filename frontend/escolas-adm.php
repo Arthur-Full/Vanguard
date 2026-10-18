@@ -1,6 +1,5 @@
-<!DOCTYPE html>
 <?php
-require_once __DIR__ . '/../backend/config/conexao.php';
+require_once __DIR__ . '/../backend/config/auth.php'; exigirPerfil(['admin', 'coordenador']);
 if (isset($_GET['api'])) {
     header('Content-Type: application/json; charset=utf-8');
     try {
@@ -41,6 +40,7 @@ if (isset($_GET['api'])) {
     exit;
 }
 ?>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">

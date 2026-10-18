@@ -54,12 +54,12 @@ CREATE TABLE disciplinas (
 
 CREATE TABLE matriculas (
     id_matricula INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    id_aluno INT UNSIGNED NOT NULL,
+    id_usuario INT UNSIGNED NOT NULL,
     id_turma INT UNSIGNED NOT NULL,
     data_matricula DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     status ENUM('ativa', 'inativa', 'concluida') NOT NULL DEFAULT 'ativa',
-    CONSTRAINT uq_matricula_aluno_turma UNIQUE (id_aluno, id_turma),
-    CONSTRAINT fk_matricula_aluno FOREIGN KEY (id_aluno)
+    CONSTRAINT uq_matricula_aluno_turma UNIQUE (id_usuario, id_turma),
+    CONSTRAINT fk_matricula_aluno FOREIGN KEY (id_usuario)
         REFERENCES usuarios(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_matricula_turma FOREIGN KEY (id_turma)
         REFERENCES turmas(id_turma) ON DELETE CASCADE ON UPDATE CASCADE
@@ -107,6 +107,17 @@ CREATE TABLE eventos_turmas (
         REFERENCES eventos(id_evento) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT fk_evento_turma_turma FOREIGN KEY (id_turma)
         REFERENCES turmas(id_turma) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE feriados (
+    id_feriado INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    ano SMALLINT UNSIGNED NOT NULL,
+    data DATE NOT NULL,
+    titulo VARCHAR(120) NOT NULL,
+    tipo ENUM('Feriado nacional', 'Ponto facultativo') NOT NULL,
+    observacao VARCHAR(160) DEFAULT NULL,
+    CONSTRAINT uq_feriado_ano_data_titulo UNIQUE (ano, data, titulo),
+    INDEX idx_feriados_data (data)
 ) ENGINE=InnoDB;
 
 -- Controle de acesso: o PHP consulta estas permissões além do tipo de usuário.
@@ -173,9 +184,59 @@ CREATE TABLE recuperacoes_senha (
 CREATE TABLE atividades (
     id_atividade INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     id_professor INT UNSIGNED NOT NULL,
+    id_turma INT UNSIGNED NOT NULL,
+    id_disciplina INT UNSIGNED DEFAULT NULL,
+    titulo VARCHAR(120) NOT NULL,
+    descricao TEXT DEFAULT NULL,
+    data_publicacao DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    data_entrega DATETIME DEFAULT NULL,
+    valor DECIMAL(6,2) DEFAULT NULL,
+    CONSTRAINT fk_atividade_professor FOREIGN KEY (id_professor)
+        REFERENCES usuarios(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_atividade_turma FOREIGN KEY (id_turma)
+        REFERENCES turmas(id_turma) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_atividade_disciplina FOREIGN KEY (id_disciplina)
+        REFERENCES disciplinas(id_disciplina) ON DELETE SET NULL ON UPDATE CASCADE,
+    INDEX idx_atividades_turma_entrega (id_turma, data_entrega)
+) ENGINE=InnoDB;
+
+CREATE TABLE entregas_atividades (
+    id_entrega INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    id_atividade INT UNSIGNED NOT NULL,
+    id_aluno INT UNSIGNED NOT NULL,
+    resposta TEXT DEFAULT NULL,
+    arquivo VARCHAR(255) DEFAULT NULL,
+    entregue_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    nota DECIMAL(6,2) DEFAULT NULL,
+    feedback TEXT DEFAULT NULL,
+    avaliado_por INT UNSIGNED DEFAULT NULL,
+    avaliado_em DATETIME DEFAULT NULL,
+    CONSTRAINT uq_entrega_atividade_aluno UNIQUE (id_atividade, id_aluno),
+    CONSTRAINT fk_entrega_atividade FOREIGN KEY (id_atividade)
+        REFERENCES atividades(id_atividade) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_entrega_aluno FOREIGN KEY (id_aluno)
+        REFERENCES usuarios(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_entrega_avaliador FOREIGN KEY (avaliado_por)
+        REFERENCES usuarios(id_usuario) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- Ambiente inicial local. Altere a senha da conta de coordenação após o primeiro acesso.
+INSERT INTO instituicoes (id_instituicao, nome, cidade, cnpj) VALUES
+    (1, 'Vanguard Escola', 'São Paulo', '00000000000191');
+
+INSERT INTO usuarios (id_usuario, id_instituicao, nome, email, telefone, senha_hash, tipo_usuario) VALUES
+    (1, 1, 'Coordenação Vanguard', 'admin@vanguard.local', NULL, '$2y$10$gWjUSgQsBTBjJagT34Cy1.fie7ifYztUom8iGjFQywfyr5fT17pKm', 'admin'),
+    (2, 1, 'Professor Vanguard', 'professor@vanguard.local', NULL, '$2y$10$gWjUSgQsBTBjJagT34Cy1.fie7ifYztUom8iGjFQywfyr5fT17pKm', 'professor'),
+    (3, 1, 'Aluno Vanguard', 'aluno@vanguard.local', NULL, '$2y$10$gWjUSgQsBTBjJagT34Cy1.fie7ifYztUom8iGjFQywfyr5fT17pKm', 'aluno');
+
+INSERT INTO turmas (id_turma, id_instituicao, nome, serie, curso, periodo) VALUES
+    (1, 1, '1MD', '1ª série', 'Ensino Médio', 'Manhã');
+
+INSERT INTO disciplinas (id_disciplina, id_instituicao, nome) VALUES
+    (1, 1, 'Matemática');
 
 INSERT INTO professor_turmas (id_professor, id_turma, id_disciplina) VALUES (2, 1, 1);
-INSERT INTO matriculas (id_aluno, id_turma) VALUES (3, 1);
+INSERT INTO matriculas (id_usuario, id_turma) VALUES (3, 1);
 
 INSERT INTO permissoes (id_permissao, codigo, descricao) VALUES
     (1, 'usuarios.gerenciar', 'Criar, editar e inativar usuários'),
@@ -198,6 +259,27 @@ INSERT INTO eventos (id_instituicao, id_criador, titulo, descricao, data_inicio,
 
 INSERT INTO avisos (id_instituicao, id_criador, titulo, mensagem, publico_alvo) VALUES
     (1, 1, 'Bem-vindos ao Vanguard', 'Use sua conta para acompanhar eventos, avisos e atividades.', 'todos');
+
+INSERT INTO feriados (ano, data, titulo, tipo, observacao) VALUES
+    (2026, '2026-01-01', 'Confraternização Universal', 'Feriado nacional', NULL),
+    (2026, '2026-02-16', 'Carnaval', 'Ponto facultativo', NULL),
+    (2026, '2026-02-17', 'Carnaval', 'Ponto facultativo', NULL),
+    (2026, '2026-02-18', 'Quarta-Feira de Cinzas', 'Ponto facultativo', 'Até as 14h'),
+    (2026, '2026-04-03', 'Paixão de Cristo', 'Feriado nacional', NULL),
+    (2026, '2026-04-20', 'Véspera de Tiradentes', 'Ponto facultativo', NULL),
+    (2026, '2026-04-21', 'Tiradentes', 'Feriado nacional', NULL),
+    (2026, '2026-05-01', 'Dia Mundial do Trabalho', 'Feriado nacional', NULL),
+    (2026, '2026-06-04', 'Corpus Christi', 'Ponto facultativo', NULL),
+    (2026, '2026-06-05', 'Ponto facultativo', 'Ponto facultativo', NULL),
+    (2026, '2026-09-07', 'Independência do Brasil', 'Feriado nacional', NULL),
+    (2026, '2026-10-12', 'Nossa Senhora Aparecida', 'Feriado nacional', NULL),
+    (2026, '2026-10-28', 'Dia do Servidor Público Federal', 'Ponto facultativo', NULL),
+    (2026, '2026-11-02', 'Finados', 'Feriado nacional', NULL),
+    (2026, '2026-11-15', 'Proclamação da República', 'Feriado nacional', NULL),
+    (2026, '2026-11-20', 'Dia Nacional de Zumbi e da Consciência Negra', 'Feriado nacional', NULL),
+    (2026, '2026-12-24', 'Véspera de Natal', 'Ponto facultativo', 'Após as 13h'),
+    (2026, '2026-12-25', 'Natal', 'Feriado nacional', NULL),
+    (2026, '2026-12-31', 'Véspera de Ano Novo', 'Ponto facultativo', 'Após as 13h');
 
 -- Credencial de banco usada pela aplicação PHP local.
 CREATE USER IF NOT EXISTS 'curri'@'%' IDENTIFIED BY '123';

@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../backend/config/auth.php'; exigirPerfil(['professor']); ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -63,7 +64,7 @@
 
         <div class="main-column">
             <header class="topbar">
-                <a href="#" class="logout" aria-label="Sair">
+                <a href="sair.php" class="logout" aria-label="Sair">
                     <img src="imagem/exit.png" alt="" aria-hidden="true">
                 </a>
             </header>

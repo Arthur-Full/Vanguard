@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../backend/config/auth.php'; exigirPerfil(['aluno']); $nomeUsuario = htmlspecialchars(usuarioAtual()['nome'], ENT_QUOTES, 'UTF-8'); $feriados = feriadosDoAno((int)date('Y')); ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -5,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendário do aluno | Vanguard</title>
     <link rel="stylesheet" href="css/calendario-aluno.css">
+    <link rel="stylesheet" href="css/feriados.css">
 </head>
 <body>
     <div class="page-shell">
@@ -15,10 +17,10 @@
 
             <div class="user-box">
                 <div class="user-avatar">
-                    <img src="imagem/perfil.png" alt="Samuel">
+                    <img src="imagem/perfil.png" alt="<?= $nomeUsuario ?>">
                 </div>
                 <div class="user-name-wrap">
-                    <strong>Samuel</strong>
+                    <strong><?= $nomeUsuario ?></strong>
                     <span>Aluno</span>
                 </div>
             </div>
@@ -45,7 +47,7 @@
 
         <div class="main-column">
             <header class="topbar">
-                <a href="#" class="logout" aria-label="Sair">
+                <a href="sair.php" class="logout" aria-label="Sair">
                     <img src="imagem/exit.png" alt="" aria-hidden="true">
                 </a>
             </header>
@@ -80,6 +82,7 @@
                         <p>---</p>
                     </div>
                 </div>
+                <section class="feriados-calendario" aria-labelledby="titulo-feriados"><h2 id="titulo-feriados">Feriados nacionais e pontos facultativos de <?= (int)date('Y') ?></h2><ul><?php foreach ($feriados as $feriado): ?><li><time datetime="<?= htmlspecialchars($feriado['data'], ENT_QUOTES, 'UTF-8') ?>"><?= date('d/m', strtotime($feriado['data'])) ?></time><strong><?= htmlspecialchars($feriado['titulo'], ENT_QUOTES, 'UTF-8') ?></strong><span><?= htmlspecialchars($feriado['tipo'], ENT_QUOTES, 'UTF-8') ?><?= $feriado['observacao'] ? ' — ' . htmlspecialchars($feriado['observacao'], ENT_QUOTES, 'UTF-8') : '' ?></span></li><?php endforeach; ?></ul></section>
             </main>
         </div>
     </div>

@@ -1,6 +1,5 @@
-<!DOCTYPE html>
 <?php
-require_once __DIR__ . '/../backend/config/conexao.php';
+require_once __DIR__ . '/../backend/config/auth.php'; exigirPerfil(['admin', 'coordenador']);
 if (isset($_GET['api'])) {
     header('Content-Type: application/json; charset=utf-8');
     try {
@@ -8,7 +7,10 @@ if (isset($_GET['api'])) {
         $payload = json_decode(file_get_contents('php://input'), true) ?? [];
         $api = (string)$_GET['api'];
         if ($api === 'eventos' && $_SERVER['REQUEST_METHOD'] === 'GET') {
-            echo json_encode(['sucesso'=>true,'dados'=>$pdo->query('SELECT id_evento,id_instituicao,titulo,descricao,data_inicio,data_fim,local,publico_alvo FROM eventos ORDER BY data_inicio')->fetchAll()]);
+            $eventos = $pdo->query('SELECT id_evento,id_instituicao,titulo,descricao,data_inicio,data_fim,local,publico_alvo,FALSE AS is_feriado FROM eventos ORDER BY data_inicio')->fetchAll();
+            $stmt = $pdo->prepare("SELECT NULL AS id_evento,NULL AS id_instituicao,titulo,CONCAT(tipo,IF(observacao IS NULL,'',CONCAT(' — ',observacao))) AS descricao,CONCAT(data,' 00:00:00') AS data_inicio,NULL AS data_fim,NULL AS local,'Todos' AS publico_alvo,TRUE AS is_feriado FROM feriados WHERE ano=:ano ORDER BY data");
+            $stmt->execute([':ano'=>(int)date('Y')]);
+            echo json_encode(['sucesso'=>true,'dados'=>array_merge($eventos,$stmt->fetchAll())]);
         } elseif ($api === 'instituicoes' && $_SERVER['REQUEST_METHOD'] === 'GET') {
             echo json_encode(['sucesso'=>true,'dados'=>$pdo->query('SELECT id_instituicao,nome FROM instituicoes ORDER BY nome')->fetchAll()]);
         } elseif (in_array($api,['criar_evento','editar_evento'],true) && $_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -37,6 +39,7 @@ if (isset($_GET['api'])) {
     exit;
 }
 ?>
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -44,6 +47,7 @@ if (isset($_GET['api'])) {
     <meta name="theme-color" content="#091e0a">
     <title>Calendário | Coordenação</title>
     <link rel="stylesheet" href="css/calendario-adm.css">
+    <link rel="stylesheet" href="css/feriados.css">
     <link rel="stylesheet" href="css/aside-adm.css">
 </head>
 <body>
@@ -154,7 +158,7 @@ if (isset($_GET['api'])) {
             document.getElementById('total-eventos').textContent = `${upcoming.length} ${upcoming.length === 1 ? 'evento' : 'eventos'}`;
             const body = document.getElementById('lista-eventos');
             if (!upcoming.length) { body.innerHTML = '<tr><td colspan="4" class="table-state">Nenhum evento cadastrado. Use “Novo evento” para adicionar à agenda.</td></tr>'; return; }
-            body.innerHTML = upcoming.map(event => `<tr><td data-label="Data">${escapeHtml(formatDate(event.data_inicio))}</td><td data-label="Evento"><strong class="event-title">${escapeHtml(event.titulo)}</strong>${event.descricao ? `<small class="event-description">${escapeHtml(event.descricao)}</small>` : ''}</td><td data-label="Público">${escapeHtml(event.publico_alvo || 'Todos')}</td><td data-label="Ações"><div class="row-actions"><button class="button button-edit" type="button" data-edit="${escapeHtml(event.id_evento)}">Editar</button><button class="button button-delete" type="button" data-delete="${escapeHtml(event.id_evento)}">Excluir</button></div></td></tr>`).join('');
+            body.innerHTML = upcoming.map(event => `<tr><td data-label="Data">${escapeHtml(formatDate(event.data_inicio))}</td><td data-label="Evento"><strong class="event-title">${escapeHtml(event.titulo)}</strong>${event.descricao ? `<small class="event-description">${escapeHtml(event.descricao)}</small>` : ''}</td><td data-label="Público">${escapeHtml(event.publico_alvo || 'Todos')}</td><td data-label="Ações">${event.is_feriado ? '<span>Calendário oficial</span>' : `<div class="row-actions"><button class="button button-edit" type="button" data-edit="${escapeHtml(event.id_evento)}">Editar</button><button class="button button-delete" type="button" data-delete="${escapeHtml(event.id_evento)}">Excluir</button></div>`}</td></tr>`).join('');
         }
         function openEventForm(event = null, day = '') {
             const form = document.getElementById('form-evento'); form.reset();

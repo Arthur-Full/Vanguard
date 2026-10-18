@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../backend/config/auth.php'; exigirPerfil(['professor']); $nomeUsuario = htmlspecialchars(usuarioAtual()['nome'], ENT_QUOTES, 'UTF-8'); ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -17,10 +18,10 @@
 
             <div class="user-box">
                 <div class="user-avatar">
-                    <img src="imagem/perfil.png" alt="Alce Barbosa">
+                    <img src="imagem/perfil.png" alt="<?= $nomeUsuario ?>">
                 </div>
                 <div class="user-name-wrap">
-                    <strong>Alce Barbosa</strong>
+                    <strong><?= $nomeUsuario ?></strong>
                     <span>Professor</span>
                 </div>
             </div>
@@ -60,7 +61,7 @@
                 </a>
             </nav>
 
-            <a href="#" class="btn-sair">Sair</a>
+            <a href="sair.php" class="btn-sair">Sair</a>
         </aside>
 
         <div class="main-column">

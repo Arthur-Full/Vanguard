@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../backend/config/auth.php'; exigirPerfil(['aluno']); $nomeUsuario = htmlspecialchars(usuarioAtual()['nome'], ENT_QUOTES, 'UTF-8'); ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -10,34 +11,34 @@
 
 <body>
     <aside class="sidebar">
-        <a class="brand" href="#inicio" aria-label="Vanguard, início">
+        <a class="brand" href="dash-aluno.php" aria-label="Vanguard, início">
             <img src="imagem/LOGO.png" alt="Vanguard, portal educacional">
         </a>
 
         <div class="student">
             <div class="student-avatar" aria-hidden="true"><img src="imagem/perfil.png" alt=""></div>
             <div>
-                <strong>Arthur</strong>
+                <strong><?= $nomeUsuario ?></strong>
                 <span>Aluno</span>
             </div>
         </div>
 
         <nav class="navigation" aria-label="Navegação principal">
-            <a class="active" href="#inicio"><img src="imagem/casa-verde.png" alt="">Dashboard</a>
-            <a href="#calendario"><img src="imagem/calendario-verde.png" alt="">Calendário</a>
-            <a href="#aulas"><img src="imagem/livro-branco.png" alt="">Aulas</a>
-            <a href="#perfil"><img src="imagem/perfil.png" alt="">Perfil</a>
+            <a class="active" href="dash-aluno.php"><img src="imagem/casa-verde.png" alt="">Dashboard</a>
+            <a href="calendario-aluno.php"><img src="imagem/calendario-verde.png" alt="">Calendário</a>
+            <a href="aulas-aluno.php"><img src="imagem/livro-branco.png" alt="">Aulas</a>
+            <a href="perfil.php"><img src="imagem/perfil.png" alt="">Perfil</a>
         </nav>
     </aside>
 
     <main class="page" id="inicio">
         <header class="topbar">
-            <a class="logout" href="#sair" aria-label="Sair" title="Sair"><img src="imagem/exit.png" alt=""></a>
+            <a class="logout" href="sair.php" aria-label="Sair" title="Sair"><img src="imagem/exit.png" alt=""></a>
         </header>
 
         <div class="dashboard">
             <section class="welcome" aria-label="Boas-vindas">
-                <h1>Olá, <span>Arthur!</span></h1>
+                <h1>Olá, <span><?= $nomeUsuario ?>!</span></h1>
                 <p>Confira seus próximos eventos e não perca nenhuma atividade</p>
             </section>
 
