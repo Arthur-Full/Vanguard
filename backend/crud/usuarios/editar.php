@@ -10,21 +10,25 @@ if (($_SERVER['REQUEST_METHOD'] === 'PUT' || $_SERVER['REQUEST_METHOD'] === 'POS
 
         if (!empty($dados['senha'])) {
             $senhaHash = password_hash($dados['senha'], PASSWORD_BCRYPT);
-            $sql = "UPDATE usuarios SET nome = :nome, email = :email, senha_hash = :senha_hash, tipo_usuario = :tipo_usuario, foto_perfil = :foto_perfil WHERE id_usuario = :id_usuario";
+            $sql = "UPDATE usuarios SET id_instituicao = COALESCE(:id_instituicao, id_instituicao), nome = :nome, email = :email, telefone = COALESCE(:telefone, telefone), senha_hash = :senha_hash, tipo_usuario = :tipo_usuario, foto_perfil = COALESCE(:foto_perfil, foto_perfil) WHERE id_usuario = :id_usuario";
             $params = [
                 ':id_usuario' => $dados['id_usuario'],
+                ':id_instituicao' => $dados['id_instituicao'] ?? null,
                 ':nome' => $dados['nome'],
                 ':email' => $dados['email'],
+                ':telefone' => $dados['telefone'] ?? null,
                 ':senha_hash' => $senhaHash,
                 ':tipo_usuario' => $dados['tipo_usuario'],
                 ':foto_perfil' => $dados['foto_perfil'] ?? null
             ];
         } else {
-            $sql = "UPDATE usuarios SET nome = :nome, email = :email, tipo_usuario = :tipo_usuario, foto_perfil = :foto_perfil WHERE id_usuario = :id_usuario";
+            $sql = "UPDATE usuarios SET id_instituicao = COALESCE(:id_instituicao, id_instituicao), nome = :nome, email = :email, telefone = COALESCE(:telefone, telefone), tipo_usuario = :tipo_usuario, foto_perfil = COALESCE(:foto_perfil, foto_perfil) WHERE id_usuario = :id_usuario";
             $params = [
                 ':id_usuario' => $dados['id_usuario'],
+                ':id_instituicao' => $dados['id_instituicao'] ?? null,
                 ':nome' => $dados['nome'],
                 ':email' => $dados['email'],
+                ':telefone' => $dados['telefone'] ?? null,
                 ':tipo_usuario' => $dados['tipo_usuario'],
                 ':foto_perfil' => $dados['foto_perfil'] ?? null
             ];

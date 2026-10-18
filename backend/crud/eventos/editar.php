@@ -9,7 +9,8 @@ if (($_SERVER['REQUEST_METHOD'] === 'PUT' || $_SERVER['REQUEST_METHOD'] === 'POS
         $pdo = getConnection();
 
         $sql = "UPDATE eventos
-                SET titulo = :titulo,
+                SET id_instituicao = :id_instituicao,
+                    titulo = :titulo,
                     descricao = :descricao,
                     data_inicio = :data_inicio,
                     data_fim = :data_fim,
@@ -20,6 +21,7 @@ if (($_SERVER['REQUEST_METHOD'] === 'PUT' || $_SERVER['REQUEST_METHOD'] === 'POS
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             ':id_evento' => $dados['id_evento'],
+            ':id_instituicao' => $dados['id_instituicao'],
             ':titulo' => $dados['titulo'],
             ':descricao' => $dados['descricao'] ?? null,
             ':data_inicio' => $dados['data_inicio'],

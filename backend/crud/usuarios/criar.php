@@ -9,14 +9,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($dados)){
         $pdo = getConnection();
         $senhaHash = password_hash($dados['senha'], PASSWORD_BCRYPT);
 
-        $sql = "INSERT INTO usuarios (id_instituicao, nome, email, senha_hash, tipo_usuario, foto_perfil) 
-                VALUES (:id_instituicao, :nome, :email, :senha_hash, :tipo_usuario, :foto_perfil)";
+        $sql = "INSERT INTO usuarios (id_instituicao, nome, email, telefone, senha_hash, tipo_usuario, foto_perfil) 
+                VALUES (:id_instituicao, :nome, :email, :telefone, :senha_hash, :tipo_usuario, :foto_perfil)";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute([
             ':id_instituicao' => $dados['id_instituicao'],
             ':nome' => $dados['nome'],
             ':email' => $dados['email'],
+            ':telefone' => $dados['telefone'] ?? null,
             ':senha_hash' => $senhaHash,
             ':tipo_usuario' => $dados['tipo_usuario'],
             ':foto_perfil' => $dados['foto_perfil'] ?? null

@@ -24,19 +24,19 @@
             </div>
 
             <nav class="side-nav" aria-label="Navegação principal">
-                <a href="#" class="nav-item">
+                <a href="dash-aluno.php" class="nav-item">
                     <img src="imagem/casa-branca.png" alt="" aria-hidden="true">
                     <span>DashBoard</span>
                 </a>
-                <a href="#" class="nav-item">
+                <a href="calendario-aluno.php" class="nav-item">
                     <img src="imagem/calendario-01.png" alt="" aria-hidden="true">
                     <span>Calendário</span>
                 </a>
-                <a href="#" class="nav-item active">
+                <a href="aulas-aluno.php" class="nav-item active" aria-current="page">
                     <img src="imagem/livro_01.png" alt="" aria-hidden="true">
                     <span>Aulas</span>
                 </a>
-                <a href="#" class="nav-item">
+                <a href="perfil.php" class="nav-item">
                     <img src="imagem/perfil.png" alt="" aria-hidden="true">
                     <span>Perfil</span>
                 </a>

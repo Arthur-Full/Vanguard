@@ -8,10 +8,11 @@ if (($_SERVER['REQUEST_METHOD'] === 'PUT' || $_SERVER['REQUEST_METHOD'] === 'POS
     try {
         $pdo = getConnection();
 
-        $sql = "UPDATE turmas SET nome = :nome, serie = :serie, curso = :curso, periodo = :periodo WHERE id_turma = :id_turma";
+        $sql = "UPDATE turmas SET id_instituicao = :id_instituicao, nome = :nome, serie = :serie, curso = :curso, periodo = :periodo WHERE id_turma = :id_turma";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([    
             ':id_turma' => $dados['id_turma'],
+            ':id_instituicao' => $dados['id_instituicao'],
             ':nome' => $dados['nome'],
             ':serie' => $dados['serie'] ?? null,
             ':curso' => $dados['curso'] ?? null,

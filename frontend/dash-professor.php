@@ -26,25 +26,25 @@
             </div>
 
             <nav class="side-nav" aria-label="Navegação principal">
-                <a href="#" class="nav-item active">
-                    <img src="imagem/casa-branca.png" alt="" aria-hidden="true">
+                <a href="dash-professor.php" class="nav-item active" aria-current="page">
+                    <img src="imagem/casa-verde.png" alt="" aria-hidden="true">
                     <span>DashBoard</span>
                 </a>
-                <a href="#" class="nav-item">
-                    <img src="imagem/salas.png" alt="" aria-hidden="true">
+                <a href="salas-professor.php" class="nav-item">
+                    <img src="imagem/salas-branco.png" alt="" aria-hidden="true">
                     <span>Salas</span>
                     <i class="seta" aria-hidden="true"></i>
                 </a>
-                <a href="#" class="nav-item">
-                    <img src="imagem/calendario_01.png" alt="" aria-hidden="true">
+                <a href="calendario-professor.php" class="nav-item">
+                    <img src="imagem/calendario-01.png" alt="" aria-hidden="true">
                     <span>Calendário / aulas do dia</span>
                 </a>
-                <a href="#" class="nav-item">
-                    <img src="imagem/livro-branco.png" alt="" aria-hidden="true">
+                <a href="notas-professor.php" class="nav-item">
+                    <img src="imagem/atividades-branco.png" alt="" aria-hidden="true">
                     <span>Atividades</span>
                 </a>
-                <a href="#" class="nav-item">
-                    <img src="imagem/notas.png" alt="" aria-hidden="true">
+                <a href="notas-professor.php" class="nav-item">
+                    <img src="imagem/notas-branco.png" alt="" aria-hidden="true">
                     <span>Notas</span>
                 </a>
             </nav>
@@ -64,7 +64,7 @@
                     <div class="dash-principal">
                         <section class="stats" aria-label="Resumo">
                             <article class="stat-card">
-                                <div class="stat-icone"><img src="imagem/icone-turma.png" alt=""></div>
+                                <div class="stat-icone"><img src="imagem/grupo-verde.png" alt=""></div>
                                 <div class="stat-info">
                                     <h3>Turma</h3>
                                     <strong>5</strong>
@@ -72,7 +72,7 @@
                                 </div>
                             </article>
                             <article class="stat-card">
-                                <div class="stat-icone"><img src="imagem/icone-aulas.png" alt=""></div>
+                                <div class="stat-icone"><img src="imagem/livro_01.png" alt=""></div>
                                 <div class="stat-info">
                                     <h3>Aulas de hoje</h3>
                                     <strong>5</strong>
@@ -80,7 +80,7 @@
                                 </div>
                             </article>
                             <article class="stat-card">
-                                <div class="stat-icone"><img src="imagem/icone-atividades.png" alt=""></div>
+                                <div class="stat-icone"><img src="imagem/pendentes.png" alt=""></div>
                                 <div class="stat-info">
                                     <h3>Atividades pendentes</h3>
                                     <strong>5</strong>
@@ -91,7 +91,7 @@
 
                         <section class="card cronograma">
                             <div class="card-cab">
-                                <h2><img src="imagem/calendario-semanal.png" alt="">Cronograma Semanal</h2>
+                                <h2><img src="imagem/calendario_01.png" alt="">Cronograma Semanal</h2>
                                 <a href="#" class="link-ano">cronograma do ano &#10140;</a>
                             </div>
 
@@ -140,8 +140,8 @@
 
                     <div class="dash-lateral">
                         <section class="card campanha">
-                            <h2><img src="imagem/megafone.png" alt="">Campanha do mês</h2>
-                            <img src="imagem/campanha-setembro-amarelo.png" alt="Setembro Amarelo" class="campanha-img">
+                            <h2><img src="imagem/comunicado.png" alt="">Campanha do mês</h2>
+                            <img src="imagem/evento_01.jpg" alt="Setembro Amarelo" class="campanha-img">
                             <a href="#" class="link-ano">Ver próximos eventos &#10140;</a>
                         </section>
 
@@ -160,7 +160,7 @@
                         </section>
 
                         <section class="card lateral-card">
-                            <h2 class="centro"><img src="imagem/proximas-aulas.png" alt="">Próximas aulas</h2>
+                            <h2 class="centro"><img src="imagem/proxima-aula.png" alt="">Próximas aulas</h2>
                             <ul class="timeline">
                                 <li>
                                     <time>07:45</time>
