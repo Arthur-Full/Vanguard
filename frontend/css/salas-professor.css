@@ -1345,6 +1345,30 @@ button {
     white-space: nowrap;
     transition: opacity 250ms ease;
 }
+.carteira .aluno-perfil-link {
+    max-width: 100%;
+    overflow: hidden;
+    padding: 3px 8px;
+    border: 1px solid rgba(45, 122, 92, .2);
+    border-radius: 999px;
+    background: #edf6f1;
+    color: #111;
+    font-size: 10px;
+    line-height: 14px;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    transition: background 160ms ease, color 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+.carteira .aluno-perfil-link:hover {
+    border-color: #2d7a5c;
+    background: #2d7a5c;
+    color: #111;
+    text-decoration: none;
+}
+.carteira .aluno-perfil-link:focus-visible {
+    outline: 3px solid rgba(45, 122, 92, .35);
+    outline-offset: 2px;
+}
 
 .carteira .tampo { position: relative; transition: background 250ms ease, opacity 250ms ease, box-shadow 180ms ease; }
 .carteira .tampo::after {

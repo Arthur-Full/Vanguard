@@ -5,8 +5,8 @@ $usuario=usuarioAtual();
 $pdo=getConnection();
 $idProfessor=(int)$usuario['id_usuario'];
 $esc=static fn($value)=>htmlspecialchars((string)$value,ENT_QUOTES,'UTF-8');
-$stmt=$pdo->prepare("SELECT t.id_turma,t.nome AS turma,GROUP_CONCAT(DISTINCT d.nome ORDER BY d.nome SEPARATOR ', ') AS disciplina FROM professor_turmas pt JOIN turmas t ON t.id_turma=pt.id_turma LEFT JOIN disciplinas d ON d.id_disciplina=pt.id_disciplina WHERE pt.id_professor=:professor AND t.status='ativa' GROUP BY t.id_turma,t.nome ORDER BY t.nome");
-$stmt->execute([':professor'=>$idProfessor]);
+$stmt=$pdo->prepare("SELECT t.id_turma,t.nome AS turma,GROUP_CONCAT(DISTINCT d.nome ORDER BY d.nome SEPARATOR ', ') AS disciplina FROM turmas t LEFT JOIN professor_turmas pt ON pt.id_turma=t.id_turma AND pt.id_professor=:professor LEFT JOIN disciplinas d ON d.id_disciplina=pt.id_disciplina WHERE t.id_instituicao=:instituicao AND t.status='ativa' GROUP BY t.id_turma,t.nome ORDER BY t.nome");
+$stmt->execute([':professor'=>$idProfessor,':instituicao'=>(int)$usuario['id_instituicao']]);
 $turmas=$stmt->fetchAll();
 $resumosTurma=[];$stmt=$pdo->prepare("SELECT a.id_turma,a.id_aluno,AVG(a.nota) AS media FROM avaliacoes_alunos a JOIN matriculas m ON m.id_usuario=a.id_aluno AND m.id_turma=a.id_turma AND m.status='ativa' JOIN usuarios u ON u.id_usuario=a.id_aluno AND u.status='ativo' WHERE a.id_professor=:professor GROUP BY a.id_turma,a.id_aluno");$stmt->execute([':professor'=>$idProfessor]);foreach($stmt->fetchAll() as $resumo){$chave=(int)$resumo['id_turma'];$resumosTurma[$chave]['soma']=($resumosTurma[$chave]['soma']??0)+(float)$resumo['media'];$resumosTurma[$chave]['alunos']=($resumosTurma[$chave]['alunos']??0)+1;if((float)$resumo['media']<7)$resumosTurma[$chave]['recuperacao']=($resumosTurma[$chave]['recuperacao']??0)+1;}
 $idTurma=filter_var($_GET['turma']??($turmas[0]['id_turma']??null),FILTER_VALIDATE_INT);
@@ -23,9 +23,9 @@ if($_SERVER['REQUEST_METHOD']==='POST' && ($_POST['acao']??'')==='nota'){
     $data=$_POST['data_avaliacao']??date('Y-m-d');
     try{
         if(!$idTurmaPost || !$idAluno || !in_array($tipo,['atividade','trabalho','prova'],true) || $titulo==='' || !is_numeric($notaRaw) || (float)$notaRaw<0 || (float)$notaRaw>10) throw new InvalidArgumentException('Preencha atividade/tipo, título e nota de 0 a 10.');
-        $vinculo=$pdo->prepare('SELECT 1 FROM professor_turmas WHERE id_professor=:professor AND id_turma=:turma LIMIT 1');
-        $vinculo->execute([':professor'=>$idProfessor,':turma'=>$idTurmaPost]);
-        if(!$vinculo->fetchColumn()) throw new InvalidArgumentException('Esta turma não está vinculada ao seu cadastro.');
+        $vinculo=$pdo->prepare("SELECT 1 FROM turmas WHERE id_turma=:turma AND id_instituicao=:instituicao AND status='ativa' LIMIT 1");
+        $vinculo->execute([':turma'=>$idTurmaPost,':instituicao'=>(int)$usuario['id_instituicao']]);
+        if(!$vinculo->fetchColumn()) throw new InvalidArgumentException('Esta sala não está ativa na sua instituição.');
         $matricula=$pdo->prepare("SELECT 1 FROM matriculas m JOIN usuarios u ON u.id_usuario=m.id_usuario WHERE m.id_usuario=:aluno AND m.id_turma=:turma AND m.status='ativa' AND u.status='ativo' AND u.tipo_usuario='aluno'");
         $matricula->execute([':aluno'=>$idAluno,':turma'=>$idTurmaPost]);
         if(!$matricula->fetchColumn()) throw new InvalidArgumentException('O aluno não está ativo nesta turma.');
@@ -61,7 +61,6 @@ $nomeUsuario=$esc($usuario['nome']);
         <a href="dash-professor.php" class="nav-item"><img src="imagem/casa-branca.png" alt="" aria-hidden="true"><span>DashBoard</span></a>
         <div class="nav-dropdown"><a class="nav-item nav-toggle" tabindex="0" role="button" aria-controls="submenu-salas"><img src="imagem/salas-branco.png" alt="" aria-hidden="true"><span>Salas</span><i class="seta" aria-hidden="true"></i></a><div class="submenu" id="submenu-salas"><ul><?php foreach($turmas as $turma): ?><li><a href="salas-professor.php?sala=<?= (int)$turma['id_turma'] ?>"><?= $esc($turma['turma']) ?></a></li><?php endforeach; ?></ul></div></div>
         <a href="calendario-professor.php" class="nav-item"><img src="imagem/calendario-01.png" alt="" aria-hidden="true"><span>Calendário / aulas do dia</span></a>
-        <a href="notas-professor.php" class="nav-item"><img src="imagem/atividades-branco.png" alt="" aria-hidden="true"><span>Atividades</span></a>
         <a href="notas-professor.php" class="nav-item active" aria-current="page"><img src="imagem/notas-verde.png" alt="" aria-hidden="true"><span>Notas</span></a>
     </nav></aside>
     <div class="main-column"><header class="topbar"><a href="sair.php" class="logout" aria-label="Sair"><img src="imagem/exit.png" alt="" aria-hidden="true"></a></header>
