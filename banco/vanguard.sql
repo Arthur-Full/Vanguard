@@ -136,14 +136,19 @@ CREATE TABLE professor_horarios (
     id_horario INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     id_professor INT UNSIGNED NOT NULL,
     id_turma INT UNSIGNED NOT NULL,
-    id_disciplina INT UNSIGNED NOT NULL,
+    id_disciplina INT UNSIGNED DEFAULT NULL,
+    disciplina_nome VARCHAR(80) DEFAULT NULL,
     dia_semana TINYINT UNSIGNED NOT NULL COMMENT '0=domingo ... 6=sábado',
     hora_inicio TIME NOT NULL,
     hora_fim TIME NOT NULL,
     criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_professor_horario (id_professor, dia_semana, hora_inicio),
-    CONSTRAINT fk_horario_vinculo FOREIGN KEY (id_professor,id_turma,id_disciplina)
-        REFERENCES professor_turmas(id_professor,id_turma,id_disciplina) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_horario_professor FOREIGN KEY (id_professor)
+        REFERENCES usuarios(id_usuario) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_horario_turma FOREIGN KEY (id_turma)
+        REFERENCES turmas(id_turma) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_horario_disciplina FOREIGN KEY (id_disciplina)
+        REFERENCES disciplinas(id_disciplina) ON DELETE SET NULL ON UPDATE CASCADE,
     CONSTRAINT chk_horario_dia CHECK (dia_semana BETWEEN 0 AND 6),
     CONSTRAINT chk_horario_periodo CHECK (hora_fim > hora_inicio)
 ) ENGINE=InnoDB;
