@@ -163,6 +163,16 @@ span {
     padding: 0px 25px 0px 25px;
 }
 
+.perfil-aside-form { display:grid; gap:10px; width:100%; padding:13px; border:1px solid rgba(255,255,255,.52); border-radius:14px; background:rgba(255,255,255,.88); box-shadow:0 8px 20px rgba(22,65,64,.13); }
+.perfil-aside-form label { display:grid; gap:5px; color:#285452; font-size:12px; font-weight:700; }
+.perfil-aside-form input { width:100%; min-width:0; height:36px; padding:0 9px; border:1px solid #c5d7d5; border-radius:8px; background:#fff; color:#183b39; font:inherit; font-size:12px; }
+.perfil-aside-form input:focus { outline:3px solid rgba(53,122,120,.2); border-color:#357a78; }
+.perfil-aside-form button { min-height:40px; margin-top:3px; border:0; border-radius:9px; background:linear-gradient(135deg,#438c87,#286765); color:#fff; font-size:13px; font-weight:700; cursor:pointer; box-shadow:0 4px 10px rgba(40,103,101,.2); }
+.perfil-aside-form button:hover { filter:brightness(1.06); }
+.perfil-feedback { padding:9px; border-radius:8px; font-size:12px; line-height:1.4; }
+.perfil-feedback.sucesso { background:#e5f5eb; color:#24643b; }
+.perfil-feedback.erro { background:#fff0ee; color:#9c3028; }
+
 .nav-item.active {
     background: #e8eeee;
     color: #4f8886;
@@ -186,6 +196,10 @@ span {
     justify-content: flex-end;
     padding: 0 32px;
 }
+
+.voltar-painel { display:inline-flex; align-items:center; gap:9px; min-height:40px; margin-right:auto; padding:0 15px; border:1px solid rgba(255,255,255,.55); border-radius:10px; color:#fff; font-size:14px; font-weight:700; text-decoration:none; transition:background .18s ease,transform .18s ease; }
+.voltar-painel:hover { background:rgba(255,255,255,.16); transform:translateX(-2px); }
+.voltar-painel span { color:inherit; font-size:20px; line-height:1; }
 
 .logout {
     display: flex;
@@ -436,10 +450,28 @@ span {
 
 .pf-curriculo-wrap {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 10px;
     margin-bottom: 4px;
 }
+
+.pf-curriculo-wrap { width:100%; padding:20px; border:1px solid #dce8e7; border-radius:14px; background:linear-gradient(145deg,#fff 0%,#f5faf9 100%); box-shadow:0 8px 24px rgba(30,75,74,.08); }
+.pf-curriculo-link { display:inline-flex; align-items:center; gap:8px; min-height:44px; padding:11px 17px; border-radius:10px; background:#357a78; color:#fff; font-weight:700; text-decoration:none; box-shadow:0 4px 10px rgba(53,122,120,.2); transition:background .18s ease,transform .18s ease; }
+.pf-curriculo-link::before { content:"↗"; font-size:17px; }
+.pf-curriculo-link:hover { background:#286765; transform:translateY(-1px); }
+.pf-curriculo-vazio,.curriculo-feedback { margin:0 0 12px; }
+.curriculo-feedback.sucesso { color:#216b3b; }
+.curriculo-feedback.erro { color:#a12626; }
+.curriculo-form { display:grid; gap:12px; width:100%; max-width:560px; margin-top:16px; padding:17px; border:1px dashed #9bbdbc; border-radius:12px; background:rgba(224,240,238,.48); }
+.curriculo-form label { color:#294f4d; font-size:14px; font-weight:700; }
+.curriculo-form input[type="file"] { width:100%; min-height:48px; padding:7px; border:1px solid #cbd9d8; border-radius:9px; background:#fff; color:#526b69; }
+.curriculo-form input[type="file"]::file-selector-button { margin-right:12px; padding:9px 13px; border:0; border-radius:7px; background:#e0eeec; color:#286765; font:inherit; font-weight:700; cursor:pointer; }
+.curriculo-form input[type="file"]:focus-visible { outline:3px solid rgba(53,122,120,.25); border-color:#357a78; }
+.curriculo-form button { display:inline-flex; justify-self:start; align-items:center; gap:8px; min-height:44px; padding:0 18px; border:0; border-radius:10px; background:linear-gradient(135deg,#438c87,#286765); color:#fff; font-weight:700; box-shadow:0 5px 12px rgba(40,103,101,.22); cursor:pointer; transition:transform .18s ease,box-shadow .18s ease; }
+.curriculo-form button::after { content:"↑"; font-size:18px; }
+.curriculo-form button:hover { transform:translateY(-2px); box-shadow:0 8px 16px rgba(40,103,101,.28); }
+.curriculo-form button:focus-visible,.voltar-painel:focus-visible { outline:3px solid #f2d879; outline-offset:3px; }
 
 .pf-add {
     width: 106px;

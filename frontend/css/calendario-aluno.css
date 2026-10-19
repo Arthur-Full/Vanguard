@@ -77,6 +77,59 @@ button {
     object-fit: cover;
 }
 
+.month-card { position:relative; display:block; }
+.month-card:hover,.month-card:focus-visible { outline:4px solid #357a78; outline-offset:2px; }
+.month-event-count { position:absolute; right:8px; bottom:8px; padding:5px 9px; border-radius:20px; background:#173d3ddd; color:#fff; font-size:11px; font-weight:700; }
+.month-detail-heading { width:100%; height:auto; padding:12px 18px; border-radius:14px; color:#fff; font-size:20px; font-weight:700; text-align:left; }
+.month-detail-toolbar { display:flex; align-items:center; justify-content:center; gap:24px; margin:18px auto 8px; color:#315f60; font-size:22px; font-weight:700; }
+.month-detail-toolbar a { display:grid; width:40px; height:40px; place-items:center; border-radius:50%; background:#d8e8e7; color:#315f60; font-size:30px; line-height:1; text-decoration:none; }
+.month-detail-toolbar a:hover { background:#357a78; color:#fff; }
+.calendar-back { display:inline-block; margin:0 0 18px; color:#357a78; font-weight:700; text-decoration:none; }
+.calendar-back:hover { text-decoration:underline; }
+.month-detail-layout { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(250px,.9fr); gap:20px; align-items:start; }
+.month-detail-calendar,.month-events-panel,.annual-agenda { padding:18px; border-radius:16px; background:#fff; box-shadow:0 8px 22px rgba(20,61,60,.08); }
+.student-month-grid { width:100%; border-collapse:collapse; table-layout:fixed; text-align:center; }
+.student-month-grid th { height:40px; background:#357a78; color:#fff; font-size:13px; }
+.student-month-grid td { height:88px; padding:7px; border:1px solid #dce7e6; color:#315f60; text-align:left; vertical-align:top; }
+.student-month-grid td.empty { background:#f6f8f8; }
+.student-month-grid td.has-events { background:#edf6f5; }
+.student-month-grid td.has-holiday { box-shadow:inset 0 3px #dc9a54; }
+.student-month-grid td time { display:inline-flex; min-width:25px; height:25px; align-items:center; justify-content:center; border-radius:50%; font-weight:700; }
+.day-event-count { display:block; margin-top:8px; color:#357a78; font-size:11px; font-weight:700; }
+.month-events-panel h2,.annual-agenda h2 { margin:0 0 14px; color:#315f60; font-size:18px; }
+.month-events-panel ul,.annual-agenda ul { display:grid; gap:9px; margin:0; padding:0; list-style:none; }
+.calendar-event { display:grid; grid-template-columns:minmax(75px,auto) 1fr; gap:10px; padding:11px; border:1px solid #e2ebea; border-radius:10px; background:#fbfdfd; }
+.calendar-event.holiday-event { border-left:4px solid #dc9a54; }
+.calendar-event time { color:#357a78; font-size:12px; font-weight:700; white-space:nowrap; }
+.calendar-event strong { display:block; color:#263f3e; font-size:14px; }
+.calendar-event p,.calendar-event small { display:block; margin:4px 0 0; color:#617472; font-size:12px; line-height:1.45; }
+.calendar-empty,.calendar-loading { color:#657977; font-size:14px; }
+.annual-agenda { margin-top:20px; }
+.calendar-error { margin-top:14px; padding:10px 14px; border-radius:9px; background:#fae8e8; color:#8c3333; }
+.dashboard-month-events { margin-top:14px; }
+.dashboard-month-events h3 { margin-bottom:8px; color:#357a78; font-size:13px; }
+.dashboard-month-events ul { display:grid; gap:5px; max-height:130px; overflow:auto; padding:0; list-style:none; }
+.dashboard-month-events .calendar-event { grid-template-columns:75px 1fr; padding:7px 9px; }
+.dashboard-month-events .calendar-event p,.dashboard-month-events .calendar-event small { display:none; }
+.calendar-grid td.has-events { background:#edf6f5; }
+.calendar-grid td.has-holiday { box-shadow:inset 0 3px #dc9a54; }
+.event-pill { display:block; overflow:hidden; margin:1px 4px; padding:2px 4px; border-radius:4px; background:#d8e8e7; color:#315f60; font-size:9px; line-height:1.2; text-overflow:ellipsis; white-space:nowrap; }
+.calendar-grid td.has-holiday .event-pill { background:#f7e8d7; color:#754a21; }
+.dashboard .calendar-panel .month-label { text-transform:capitalize; }
+
+@media (max-width: 900px) {
+    .month-detail-layout { grid-template-columns:1fr; }
+    .month-events-panel ul { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media (max-width: 700px) {
+    .caixa-maior { gap:16px; padding:18px; }
+    .month-detail-calendar { padding:8px; }
+    .student-month-grid th { height:32px; font-size:11px; }
+    .student-month-grid td { height:60px; padding:4px; }
+    .day-event-count { font-size:9px; }
+    .month-events-panel ul { grid-template-columns:1fr; }
+}
+
 .caixa-baixo {
     display: grid;
     grid-template-columns: repeat(3, 1fr);

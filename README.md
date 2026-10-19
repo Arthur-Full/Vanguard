@@ -15,4 +15,4 @@ O banco inicial cria contas locais de demonstração. Use o dropdown `Vanguard E
 - Professor: `professor@vanguard.local` / `Vanguard@2026`
 - Aluno: `aluno@vanguard.local` / `Vanguard@2026`
 
-Troque essas credenciais antes de usar com dados reais. Para instalar as contas sem recriar uma base já existente, importe `banco/acessos-iniciais.sql`. Para adicionar os feriados de 2026 a uma base existente, importe `backend/migracoes/2026-10-18-feriados-2026.sql`.
+Troque essas credenciais antes de usar com dados reais. Para instalar as contas sem recriar uma base já existente, importe `banco/acessos-iniciais.sql`. Para adicionar os feriados de 2026 a uma base existente, importe `backend/migracoes/2026-10-18-feriados-2026.sql`. Para habilitar o envio de currículo no perfil, importe `backend/migracoes/2026-10-18-curriculo-perfil.sql`. Para habilitar a edição das informações do aluno no perfil, importe `backend/migracoes/2026-10-18-dados-perfil-aluno.sql`. Para habilitar anotações e anexos nas aulas, importe `backend/migracoes/2026-10-18-anotacoes-anexos-aluno.sql`.

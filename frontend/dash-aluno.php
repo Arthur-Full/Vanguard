@@ -1,4 +1,4 @@
-<?php require_once __DIR__ . '/../backend/config/auth.php'; exigirPerfil(['aluno']); $nomeUsuario = htmlspecialchars(usuarioAtual()['nome'], ENT_QUOTES, 'UTF-8'); ?>
+<?php require_once __DIR__ . '/../backend/config/auth.php'; exigirPerfil(['aluno']); $usuario=usuarioAtual(); $nomeUsuario=htmlspecialchars($usuario['nome'],ENT_QUOTES,'UTF-8'); ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -7,31 +7,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard do aluno | Vanguard</title>
     <link rel="stylesheet" href="css/dash-aluno.css">
+    <link rel="stylesheet" href="css/calendario-aluno.css?v=20261018-events">
+    <script src="js/calendario-aluno.js?v=20261018" defer></script>
 </head>
 
 <body>
     <aside class="sidebar">
-        <a class="brand" href="dash-aluno.php" aria-label="Vanguard, início">
-            <img src="imagem/LOGO.png" alt="Vanguard, portal educacional">
-        </a>
-
-        <div class="student">
-            <div class="student-avatar" aria-hidden="true"><img src="imagem/perfil.png" alt=""></div>
-            <div>
-                <strong><?= $nomeUsuario ?></strong>
-                <span>Aluno</span>
-            </div>
+        <div class="brand-wrap">
+            <img src="imagem/logo-maior.png" alt="Vanguard" class="brand-logo">
         </div>
-
-        <nav class="navigation" aria-label="Navegação principal">
-            <a class="active" href="dash-aluno.php"><img src="imagem/casa-verde.png" alt="">Dashboard</a>
-            <a href="calendario-aluno.php"><img src="imagem/calendario-verde.png" alt="">Calendário</a>
-            <a href="aulas-aluno.php"><img src="imagem/livro-branco.png" alt="">Aulas</a>
-            <a href="perfil.php"><img src="imagem/perfil.png" alt="">Perfil</a>
+        <div class="user-box">
+            <div class="user-avatar"><img src="imagem/perfil.png" alt="<?= $nomeUsuario ?>"></div>
+            <div class="user-name-wrap"><strong><?= $nomeUsuario ?></strong><span>Aluno</span></div>
+        </div>
+        <nav class="side-nav" aria-label="Navegação principal">
+            <a href="dash-aluno.php" class="nav-item active" aria-current="page"><img src="imagem/casa-verde.png" alt="" aria-hidden="true"><span>DashBoard</span></a>
+            <a href="calendario-aluno.php" class="nav-item"><img src="imagem/calendario_01.png" alt="" aria-hidden="true"><span>Calendário</span></a>
+            <a href="aulas-aluno.php" class="nav-item"><img src="imagem/livro-branco.png" alt="" aria-hidden="true"><span>Aulas</span></a>
+            <a href="perfil.php" class="nav-item"><img src="imagem/perfil.png" alt="" aria-hidden="true"><span>Perfil</span></a>
         </nav>
     </aside>
 
-    <main class="page" id="inicio">
+    <main class="page main-column" id="inicio">
         <header class="topbar">
             <a class="logout" href="sair.php" aria-label="Sair" title="Sair"><img src="imagem/exit.png" alt=""></a>
         </header>
@@ -49,8 +46,8 @@
                             <div class="summary-icon"><img src="imagem/calendario_01.png" alt=""></div>
                             <div>
                                 <h2>Próximo evento</h2>
-                                <p class="summary-number">5</p>
-                                <p class="summary-caption">este mês</p>
+                                <p class="summary-number" id="prox-evento-dias">—</p>
+                                <p class="summary-caption" id="prox-evento-titulo">Aguardando agenda</p>
                             </div>
                         </article>
                         <article class="summary-card">
@@ -64,76 +61,10 @@
                     </section>
 
                     <section class="calendar-panel" id="calendario" aria-labelledby="calendar-title">
-                        <div class="panel-heading">
-                            <h2 id="calendar-title"><img src="imagem/calendario-verde.png" alt="">Cronograma semanal</h2>
-                            <a href="#calendario">Cronograma do ano <span aria-hidden="true">➜</span></a>
-                        </div>
-                        <p class="month-label">Setembro</p>
-                        <table class="calendar-grid" aria-label="Calendário de setembro de 2026">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Dom</th>
-                                    <th scope="col">Seg</th>
-                                    <th scope="col">Ter</th>
-                                    <th scope="col">Qua</th>
-                                    <th scope="col">Qui</th>
-                                    <th scope="col">Sex</th>
-                                    <th scope="col">Sáb</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="empty" aria-hidden="true"></td>
-                                    <td class="empty" aria-hidden="true"></td>
-                                    <td><time datetime="2026-09-01">1</time></td>
-                                    <td><time datetime="2026-09-02">2</time></td>
-                                    <td><time datetime="2026-09-03">3</time></td>
-                                    <td><time datetime="2026-09-04">4</time></td>
-                                    <td><time datetime="2026-09-05">5</time></td>
-                                </tr>
-                                <tr>
-                                    <td><time datetime="2026-09-06">6</time></td>
-                                    <td><time datetime="2026-09-07">7</time></td>
-                                    <td><time datetime="2026-09-08">8</time></td>
-                                    <td><time datetime="2026-09-09">9</time></td>
-                                    <td><time datetime="2026-09-10">10</time></td>
-                                    <td><time datetime="2026-09-11">11</time></td>
-                                    <td><time datetime="2026-09-12">12</time></td>
-                                </tr>
-                                <tr>
-                                    <td><time datetime="2026-09-13">13</time></td>
-                                    <td><time datetime="2026-09-14">14</time></td>
-                                    <td><time datetime="2026-09-15">15</time></td>
-                                    <td><time datetime="2026-09-16">16</time></td>
-                                    <td><time datetime="2026-09-17">17</time></td>
-                                    <td><time datetime="2026-09-18">18</time></td>
-                                    <td><time datetime="2026-09-19">19</time></td>
-                                </tr>
-                                <tr>
-                                    <td><time datetime="2026-09-20">20</time></td>
-                                    <td><time datetime="2026-09-21">21</time></td>
-                                    <td><time datetime="2026-09-22">22</time></td>
-                                    <td><time datetime="2026-09-23">23</time></td>
-                                    <td><time datetime="2026-09-24">24</time></td>
-                                    <td><time datetime="2026-09-25">25</time></td>
-                                    <td><time datetime="2026-09-26">26</time></td>
-                                </tr>
-                                <tr>
-                                    <td><time datetime="2026-09-27">27</time></td>
-                                    <td><time datetime="2026-09-28">28</time></td>
-                                    <td><time datetime="2026-09-29">29</time></td>
-                                    <td><time datetime="2026-09-30">30</time></td>
-                                    <td class="empty" aria-hidden="true"></td>
-                                    <td class="empty" aria-hidden="true"></td>
-                                    <td class="empty" aria-hidden="true"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="calendar-legend">
-                            <div><strong>Feriados nacionais</strong><span>Independência do Brasil<br>7 de setembro</span></div>
-                            <div><strong>Feriado municipal</strong><span>--</span></div>
-                            <div><strong>Eventos escolares</strong><span>--</span></div>
-                        </div>
+                        <div class="panel-heading"><h2 id="calendar-title"><img src="imagem/calendario-verde.png" alt="">Cronograma mensal</h2><a href="calendario-aluno.php">Calendario anual <span aria-hidden="true">&#10132;</span></a></div>
+                        <p class="month-label" id="dashboard-month-label"></p>
+                        <table class="calendar-grid" aria-label="Calendario mensal"><thead><tr><th scope="col">Dom</th><th scope="col">Seg</th><th scope="col">Ter</th><th scope="col">Qua</th><th scope="col">Qui</th><th scope="col">Sex</th><th scope="col">Sab</th></tr></thead><tbody id="dashboard-calendar-days"></tbody></table>
+                        <section class="dashboard-month-events"><h3>Eventos deste mes</h3><ul id="dashboard-month-events" aria-live="polite"><li>Carregando eventos...</li></ul></section>
                     </section>
                 </div>
 

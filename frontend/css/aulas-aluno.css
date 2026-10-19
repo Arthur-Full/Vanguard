@@ -343,7 +343,32 @@ button {
     padding: 16px;
     font-size: 18px;
     line-height: 1.4;
+    border: 0;
 }
+
+.note-card.add-card { width:100%; font-family:inherit; cursor:pointer; }
+.note-card.saved-note { position:relative; flex-direction:column; align-items:stretch; justify-content:flex-start; gap:8px; overflow:hidden; text-align:left; }
+.saved-note > strong { overflow-wrap:anywhere; color:var(--teal-dark); font-size:16px; }
+.saved-note > p { flex:1; overflow:auto; overflow-wrap:anywhere; white-space:normal; font-size:14px; }
+.saved-note > small { color:#607675; font-size:11px; }
+.note-actions { display:flex; align-items:center; justify-content:flex-end; gap:8px; }
+.note-actions form { margin:0; }
+.note-actions button { padding:4px 8px; border:0; border-radius:6px; background:#e6eeee; color:#315f60; font-size:12px; font-weight:700; cursor:pointer; }
+.note-actions .note-delete { background:#f8e5e5; color:#8c3333; }
+.note-dialog { position:fixed; inset:50% auto auto 50%; transform:translate(-50%,-50%); width:min(520px,calc(100vw - 32px)); max-width:none; max-height:calc(100vh - 32px); margin:0; padding:0; overflow:auto; border:0; border-radius:18px; background:#fff; color:var(--text); box-shadow:0 22px 70px rgba(16,47,46,.32); }
+.note-dialog[open] { display:block; }
+.note-dialog::backdrop { background:#14282799; backdrop-filter:blur(3px); }
+.note-form { display:grid; gap:9px; padding:26px; }
+.note-form h3 { margin:-26px -26px 12px; padding:20px 26px; border-bottom:1px solid #e0ebea; background:linear-gradient(135deg,#edf6f5,#fff); color:var(--teal-dark); font-size:21px; }
+.note-form label { color:#365251; font-size:14px; font-weight:700; }
+.note-form input,.note-form textarea { width:100%; padding:11px 12px; border:1px solid #c8d7d6; border-radius:8px; background:#fbfdfd; color:var(--text); font:inherit; }
+.note-form textarea { resize:vertical; }
+.note-form-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:8px; }
+.note-form-actions button { min-height:40px; padding:0 14px; border:0; border-radius:8px; background:var(--teal-dark); color:#fff; font-weight:700; cursor:pointer; }
+.note-form-actions .dialog-cancelar { background:#e8eeee; color:#315f60; }
+.actions-feedback { margin:0 0 12px; padding:10px 14px; border-radius:8px; }
+.actions-feedback.sucesso { background:#e2f3e7; color:#216b3b; }
+.actions-feedback.erro { background:#f9e7e7; color:#8c3333; }
 
 .note-card:hover {
     display: flex;
@@ -372,6 +397,8 @@ button {
     line-height: 1.4;
     cursor: pointer;
 }
+
+.note-card.saved-note:hover,.note-card.saved-note:active { align-items:stretch; justify-content:flex-start; background:var(--white); text-align:left; cursor:default; }
 
 
 .note-card p {
@@ -411,6 +438,17 @@ button {
     font-weight: 700;
     cursor: pointer;
 }
+
+.add-attachment:hover { background:#f4fbfa; color:var(--teal-dark); }
+.attachment-help { display:block; margin-top:8px; color:#506968; text-align:center; font-size:12px; }
+.attachment-list { display:grid; gap:8px; margin:14px 0 0; padding:0; list-style:none; }
+.attachment-item { display:flex; align-items:center; justify-content:space-between; gap:12px; min-width:0; padding:10px 14px; border-radius:10px; background:#fff; }
+.attachment-item > a { display:flex; min-width:0; flex:1; align-items:center; justify-content:space-between; gap:12px; color:#315f60; font-weight:700; text-decoration:none; overflow-wrap:anywhere; }
+.attachment-item > a:hover { text-decoration:underline; }
+.attachment-item small { flex:0 0 auto; color:#687978; font-size:11px; font-weight:400; }
+.attachment-item form { margin:0; }
+.attachment-item button { width:30px; height:30px; border:0; border-radius:50%; background:#f8e5e5; color:#8c3333; font-size:20px; cursor:pointer; }
+.attachments-empty { margin-top:14px; color:#506968; text-align:center; font-size:13px; }
 
 @media (max-width: 980px) {
     .sidebar {
