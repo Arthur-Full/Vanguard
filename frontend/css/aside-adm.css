@@ -22,6 +22,10 @@ body > main > aside .nav-item.active { background:#062c1d; color:#86a88c; }
 body > main > aside .nav-item.active img { filter:none; opacity:.9; }
 .espaco_dash { display:flex; width:auto; flex:1; min-width:0; flex-direction:column; }
 .espaco_dash > header { height:59px; flex:0 0 59px; }
+.topbar { display:flex; align-items:center; justify-content:flex-end; box-sizing:border-box; width:100%; padding:0 28px; }
+.topbar-logout { display:grid; width:40px; height:40px; place-items:center; border-radius:10px; transition:background .16s ease,transform .16s ease; }
+.topbar-logout:hover,.topbar-logout:focus-visible { background:rgba(255,255,255,.14); transform:translateY(-1px); outline:none; }
+.topbar-logout img { display:block; width:25px; height:25px; object-fit:contain; filter:brightness(0) invert(1); }
 @media(max-width:900px) {
     .sidebar { flex-basis:205px; width:205px; }
     body > main > aside { width:205px; flex-basis:205px; }
@@ -49,4 +53,5 @@ body > main > aside .nav-item.active img { filter:none; opacity:.9; }
     .nav-item img,body > main > aside .nav-item img { width:23px; height:23px; flex-basis:23px; }
     .main-column { min-width:0; }
     .espaco_dash { width:100%; }
+    .topbar { height:50px; flex-basis:50px; padding:0 16px; }
 }

@@ -58,6 +58,7 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,20 +66,96 @@ try {
     <link rel="stylesheet" href="./css/dash-adm.css">
     <link rel="stylesheet" href="./css/aside-adm.css">
     <style>
-        .painel-boas-vindas{margin:0 0 18px;color:#d9ffe5}
-        .box{color:inherit;text-decoration:none}
-        .box .d h1{margin:0;font-size:2.2rem}
-        .box .d h3{margin:12px 0 0}
-        .lista-atividade{width:90%;margin:0;padding:8px 0;list-style:none;color:#fff}
-        .lista-atividade li{padding:12px 0;border-bottom:1px solid #58888f}
-        .lista-atividade li strong,.lista-atividade li span{display:block;color:#fff}
-        .lista-atividade li span{margin-top:5px;font-size:.9rem}
-        .painel-vazio,.painel-erro{padding:20px;color:#fff}
-        .informacao p{margin:12px 0}
-        .informacao a{color:#d9ffe5}
-        @media(max-width:900px){.espaco_infor,.space{height:auto;flex-wrap:wrap;padding:20px;gap:16px}.box{max-width:calc(50% - 16px);flex:1 1 240px}.quadrado{width:100%;height:auto;min-height:260px}.texto{height:auto;padding:28px 20px}.titulo{margin-left:24px}}
+        .painel-boas-vindas {
+            margin: 0 0 18px;
+            color: #d9ffe5
+        }
+
+        .box {
+            color: inherit;
+            text-decoration: none
+        }
+
+        .box .d h1 {
+            margin: 0;
+            font-size: 2.2rem
+        }
+
+        .box .d h3 {
+            margin: 12px 0 0
+        }
+
+        .lista-atividade {
+            width: 90%;
+            margin: 0;
+            padding: 8px 0;
+            list-style: none;
+            color: #fff
+        }
+
+        .lista-atividade li {
+            padding: 12px 0;
+            border-bottom: 1px solid #58888f
+        }
+
+        .lista-atividade li strong,
+        .lista-atividade li span {
+            display: block;
+            color: #fff
+        }
+
+        .lista-atividade li span {
+            margin-top: 5px;
+            font-size: .9rem
+        }
+
+        .painel-vazio,
+        .painel-erro {
+            padding: 20px;
+            color: #fff
+        }
+
+        .informacao p {
+            margin: 12px 0
+        }
+
+        .informacao a {
+            color: #d9ffe5
+        }
+
+        @media(max-width:900px) {
+
+            .espaco_infor,
+            .space {
+                height: auto;
+                flex-wrap: wrap;
+                padding: 20px;
+                gap: 16px
+            }
+
+            .box {
+                max-width: calc(50% - 16px);
+                flex: 1 1 240px
+            }
+
+            .quadrado {
+                width: 100%;
+                height: auto;
+                min-height: 260px
+            }
+
+            .texto {
+                height: auto;
+                padding: 28px 20px
+            }
+
+            .titulo {
+                margin-left: 24px
+            }
+        }
     </style>
 </head>
+
 <body>
     <main>
         <aside class="sidebar">
@@ -96,7 +173,7 @@ try {
     </main>
 
     <div class="espaco_dash">
-        <header></header>
+        <header class="topbar"><a class="topbar-logout" href="sair.php" aria-label="Sair e voltar ao login" title="Sair"><img src="./imagem/exit.png" alt=""></a></header>
         <div class="texto">
             <div>
                 <h1>Painel da <span>Coordenação</span></h1>
@@ -107,45 +184,60 @@ try {
         <?php if ($erroBanco): ?><p class="painel-erro" role="alert">Não foi possível carregar os dados. Verifique a conexão e se o banco está atualizado.</p><?php endif; ?>
 
         <div class="espaco_infor">
-            <?php foreach ([
-                ['escolas', 'Escolas', './imagem/school (2).png', 'escolas-adm.php'],
-                ['salas', 'Salas', './imagem/classroom.png', 'salas-adm.php'],
-                ['professores', 'Professores', './imagem/professor.png', 'professores-adm.php'],
-                ['alunos', 'Alunos', './imagem/reading.png', 'alunos-adm.php'],
-            ] as [$chave, $rotulo, $icone, $url]): ?>
+            <?php foreach (
+                [
+                    ['escolas', 'Escolas', './imagem/school (2).png', 'escolas-adm.php'],
+                    ['salas', 'Salas', './imagem/classroom.png', 'salas-adm.php'],
+                    ['professores', 'Professores', './imagem/professor.png', 'professores-adm.php'],
+                    ['alunos', 'Alunos', './imagem/reading.png', 'alunos-adm.php'],
+                ] as [$chave, $rotulo, $icone, $url]
+            ): ?>
                 <a class="box" href="<?= $escape($url) ?>">
                     <div class="bolinha"><img class="school_icone" src="<?= $escape($icone) ?>" alt=""></div>
-                    <div class="dados"><div class="d"><h1><span><?= $metricas[$chave] ?></span></h1><h3><?= $escape($rotulo) ?></h3></div></div>
+                    <div class="dados">
+                        <div class="d">
+                            <h1><span><?= $metricas[$chave] ?></span></h1>
+                            <h3><?= $escape($rotulo) ?></h3>
+                        </div>
+                    </div>
                 </a>
             <?php endforeach; ?>
         </div>
 
         <div class="space">
             <section class="quadrado" aria-labelledby="titulo-recentes">
-                <div class="titulo"><h1 id="titulo-recentes">Movimentações recentes</h1></div>
+                <div class="titulo">
+                    <h1 id="titulo-recentes">Movimentações recentes</h1>
+                </div>
                 <?php if (!$erroBanco && !$recentes): ?>
                     <div class="painel-vazio">Nenhuma movimentação registrada ainda.</div>
                 <?php elseif (!$erroBanco): ?>
-                    <div class="texto_"><ul class="lista-atividade">
-                        <?php foreach ($recentes as $item): ?>
-                            <li><strong><?= $escape($item['titulo']) ?></strong><span><?= $escape($item['detalhe']) ?> · <?= $escape(date('d/m/Y H:i', strtotime($item['ocorrido_em']))) ?></span></li>
-                        <?php endforeach; ?>
-                    </ul></div>
+                    <div class="texto_">
+                        <ul class="lista-atividade">
+                            <?php foreach ($recentes as $item): ?>
+                                <li><strong><?= $escape($item['titulo']) ?></strong><span><?= $escape($item['detalhe']) ?> · <?= $escape(date('d/m/Y H:i', strtotime($item['ocorrido_em']))) ?></span></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
                 <?php endif; ?>
             </section>
 
             <section class="quadrado" aria-labelledby="titulo-eventos">
-                <div class="titulo"><h1 id="titulo-eventos">Próximos eventos</h1></div>
+                <div class="titulo">
+                    <h1 id="titulo-eventos">Próximos eventos</h1>
+                </div>
                 <div class="informacao">
                     <?php if (!$erroBanco && !$eventos): ?>
                         <p>Não há próximos eventos cadastrados.</p>
-                    <?php elseif (!$erroBanco): foreach ($eventos as $evento): ?>
-                        <p><time datetime="<?= $escape(date('c', strtotime($evento['data_inicio']))) ?>"><?= $escape(date('d/m/Y H:i', strtotime($evento['data_inicio']))) ?></time> — <?= $escape($evento['titulo']) ?></p>
-                    <?php endforeach; endif; ?>
+                        <?php elseif (!$erroBanco): foreach ($eventos as $evento): ?>
+                            <p><time datetime="<?= $escape(date('c', strtotime($evento['data_inicio']))) ?>"><?= $escape(date('d/m/Y H:i', strtotime($evento['data_inicio']))) ?></time> — <?= $escape($evento['titulo']) ?></p>
+                    <?php endforeach;
+                    endif; ?>
                     <a href="calendario-adm.php">Abrir calendário</a>
                 </div>
             </section>
         </div>
     </div>
 </body>
+
 </html>

@@ -1,189 +1,70 @@
-<?php require_once __DIR__ . '/../backend/config/auth.php'; exigirPerfil(['professor']); $nomeUsuario = htmlspecialchars(usuarioAtual()['nome'], ENT_QUOTES, 'UTF-8'); ?>
+<?php
+require_once __DIR__ . '/../backend/config/auth.php';
+exigirPerfil(['professor']);
+$usuario = usuarioAtual();
+$pdo = getConnection();
+$idProfessor = (int)$usuario['id_usuario'];
+$esc = static fn($value) => htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+$stmt = $pdo->prepare("SELECT DISTINCT t.id_turma,t.nome,t.serie,t.curso FROM professor_turmas pt JOIN turmas t ON t.id_turma=pt.id_turma WHERE pt.id_professor=:professor AND t.status='ativa' ORDER BY t.nome");
+$stmt->execute([':professor'=>$idProfessor]);
+$turmas = $stmt->fetchAll();
+$idTurma = filter_var($_GET['sala'] ?? ($turmas[0]['id_turma'] ?? null), FILTER_VALIDATE_INT);
+$turmaAtual = null;
+foreach ($turmas as $turma) if ((int)$turma['id_turma'] === (int)$idTurma) { $turmaAtual=$turma; break; }
+if (!$turmaAtual && $turmas) { $turmaAtual=$turmas[0]; $idTurma=(int)$turmaAtual['id_turma']; }
+$alunos = [];
+if ($turmaAtual) {
+    $stmt=$pdo->prepare("SELECT u.id_usuario,u.nome FROM matriculas m JOIN usuarios u ON u.id_usuario=m.id_usuario WHERE m.id_turma=:turma AND m.status='ativa' AND u.tipo_usuario='aluno' AND u.status='ativo' ORDER BY m.data_matricula,u.nome");
+    $stmt->execute([':turma'=>(int)$turmaAtual['id_turma']]);
+    $alunos=$stmt->fetchAll();
+}
+$totalCarteiras=max(48,count($alunos));
+$nomeUsuario=$esc($usuario['nome']);
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salas | Vanguard</title>
     <link rel="stylesheet" href="css/salas-professor.css">
 </head>
-
 <body>
     <div class="page-shell">
         <aside class="sidebar">
-            <div class="brand-wrap">
-                <img src="imagem/logo-maior.png" alt="Vanguard" class="brand-logo">
-            </div>
-
-            <div class="user-box">
-                <div class="user-avatar">
-                    <img src="imagem/perfil.png" alt="<?= $nomeUsuario ?>">
-                </div>
-                <div class="user-name-wrap">
-                    <strong><?= $nomeUsuario ?></strong>
-                    <span>Professor</span>
-                </div>
-            </div>
-
+            <div class="brand-wrap"><img src="imagem/logo-maior.png" alt="Vanguard" class="brand-logo"></div>
+            <div class="user-box"><div class="user-avatar"><img src="imagem/perfil.png" alt="<?= $nomeUsuario ?>"></div><div class="user-name-wrap"><strong><?= $nomeUsuario ?></strong><span>Professor</span></div></div>
             <nav class="side-nav" aria-label="Navegação principal">
-                <a href="dash-professor.php" class="nav-item">
-                    <img src="imagem/casa-branca.png" alt="" aria-hidden="true">
-                    <span>DashBoard</span>
-                </a>
-
+                <a href="dash-professor.php" class="nav-item"><img src="imagem/casa-branca.png" alt="" aria-hidden="true"><span>DashBoard</span></a>
                 <div class="nav-dropdown aberto">
-                    <a href="#" class="nav-item nav-toggle" aria-expanded="true" aria-controls="submenu-salas">
-                        <img src="imagem/salas-branco.png" alt="" aria-hidden="true">
-                        <span>Salas</span>
-                        <i class="seta" aria-hidden="true"></i>
-                    </a>
-                    <div class="submenu" id="submenu-salas">
-                        <ul>
-                            <li><a href="#" data-sala="1MD">1MD</a></li>
-                            <li><a href="#" data-sala="2MD">2MD</a></li>
-                            <li><a href="#" data-sala="3MD" class="sel">3MD</a></li>
-                        </ul>
-                    </div>
+                    <a href="#" class="nav-item nav-toggle" aria-expanded="true" aria-controls="submenu-salas"><img src="imagem/salas-branco.png" alt="" aria-hidden="true"><span>Salas</span><i class="seta" aria-hidden="true"></i></a>
+                    <div class="submenu" id="submenu-salas"><ul>
+                        <?php foreach ($turmas as $turma): ?><li><a href="?sala=<?= (int)$turma['id_turma'] ?>" class="<?= (int)$turma['id_turma']===(int)$idTurma?'sel':'' ?>"><?= $esc($turma['nome']) ?></a></li><?php endforeach; ?>
+                    </ul></div>
                 </div>
-
-                <a href="calendario-professor.php" class="nav-item">
-                    <img src="imagem/calendario-01.png" alt="" aria-hidden="true">
-                    <span>Calendário / aulas do dia</span>
-                </a>
-                <a href="notas-professor.php" class="nav-item">
-                    <img src="imagem/atividades-branco.png" alt="" aria-hidden="true">
-                    <span>Atividades</span>
-                </a>
-                <a href="notas-professor.php" class="nav-item">
-                    <img src="imagem/notas-branco.png" alt="" aria-hidden="true">
-                    <span>Notas</span>
-                </a>
+                <a href="calendario-professor.php" class="nav-item"><img src="imagem/calendario-01.png" alt="" aria-hidden="true"><span>Calendário / aulas do dia</span></a>
+                <a href="notas-professor.php" class="nav-item"><img src="imagem/atividades-branco.png" alt="" aria-hidden="true"><span>Atividades</span></a>
+                <a href="notas-professor.php" class="nav-item"><img src="imagem/notas-branco.png" alt="" aria-hidden="true"><span>Notas</span></a>
             </nav>
-
             <a href="sair.php" class="btn-sair">Sair</a>
         </aside>
-
         <div class="main-column">
             <main class="content-area sala-area">
+                <?php if (!$turmaAtual): ?><p>Você ainda não possui salas vinculadas pela coordenação.</p><?php else: ?>
                 <div class="sala-piso">
-                    <div class="sala-prof" title="Mesa do professor">
-                        <span class="sala-prof-cadeira"></span>
-                        <div class="sala-prof-mesa"></div>
-                    </div>
-
-                    <div class="sala-carteiras">
-                        <div class="sala-bloco" id="bloco-esq"></div>
-                        <div class="sala-bloco" id="bloco-dir"></div>
-                    </div>
-                </div>
+                    <div class="sala-prof" title="Mesa do professor"><span class="sala-prof-cadeira"></span><div class="sala-prof-mesa"></div></div>
+                    <div class="sala-carteiras"><div class="sala-bloco" id="bloco-esq">
+                        <?php for($i=0;$i<$totalCarteiras;$i++): if($i%6<3): $aluno=$alunos[$i]??null; $ordem=intdiv($i,6)*3+($i%3); ?>
+                            <div class="carteira <?= $aluno?'ok':'vazia falta' ?>" style="--i:<?= $ordem ?>" title="<?= $aluno?$esc($aluno['nome']):'Carteira vazia' ?>"><span class="nome"><?php if($aluno): ?><a href="perfil.php?aluno=<?= (int)$aluno['id_usuario'] ?>"><?= $esc($aluno['nome']) ?></a><?php endif; ?></span><span class="tampo"></span><span class="status"></span></div>
+                        <?php endif; endfor; ?>
+                    </div><div class="sala-bloco" id="bloco-dir">
+                        <?php for($i=0;$i<$totalCarteiras;$i++): if($i%6>=3): $aluno=$alunos[$i]??null; $ordem=intdiv($i,6)*3+($i%3); ?>
+                            <div class="carteira <?= $aluno?'ok':'vazia falta' ?>" style="--i:<?= $ordem ?>" title="<?= $aluno?$esc($aluno['nome']):'Carteira vazia' ?>"><span class="nome"><?php if($aluno): ?><a href="perfil.php?aluno=<?= (int)$aluno['id_usuario'] ?>"><?= $esc($aluno['nome']) ?></a><?php endif; ?></span><span class="tampo"></span><span class="status"></span></div>
+                        <?php endif; endfor; ?>
+                    </div></div>
+                </div><?php endif; ?>
             </main>
         </div>
     </div>
-
-    <script>
-        // Todas as carteiras começam ativas (verde). 8 fileiras x 6 carteiras (3 à esquerda + 3 à direita)
-        const MAPA = Array(8).fill("GGGGGG");
-
-        const SALAS = { "1MD": MAPA, "2MD": MAPA, "3MD": MAPA };
-
-        const blocoEsq = document.getElementById("bloco-esq");
-        const blocoDir = document.getElementById("bloco-dir");
-
-        // Nomes dos alunos (um por carteira)
-        const NOMES = [
-            "Ana", "Bruno", "Carla", "Diego", "Eduarda", "Felipe", "Gabriela", "Heitor",
-            "Isabela", "João", "Karen", "Lucas", "Marina", "Nicolas", "Olívia", "Pedro",
-            "Rafaela", "Samuel", "Talita", "Vitor", "Yasmin", "Arthur", "Beatriz", "Caio",
-            "Daniela", "Enzo", "Fernanda", "Gustavo", "Helena", "Igor", "Júlia", "Kauê",
-            "Larissa", "Miguel", "Natália", "Otávio", "Paula", "Renan", "Sofia", "Thiago",
-            "Valentina", "Wesley", "Alice", "Davi", "Elisa", "Fábio", "Giovana", "Henrique"
-        ];
-        const DESLOCAMENTO = { "1MD": 0, "2MD": 16, "3MD": 32 };
-
-        // Carteiras desativadas por sala (guardado no navegador, sobrevive à troca de sala e ao recarregar)
-        const CHAVE = "vanguard-carteiras-desativadas";
-        let desativadas = {};
-        try { desativadas = JSON.parse(localStorage.getItem(CHAVE)) || {}; } catch (e) { desativadas = {}; }
-
-        function salvarDesativadas() {
-            try { localStorage.setItem(CHAVE, JSON.stringify(desativadas)); } catch (e) { /* sem armazenamento */ }
-        }
-
-        function criarCarteira(sala, numero, estado, ordem, nome) {
-            const b = document.createElement("button");
-            b.type = "button";
-            b.className = "carteira " + (estado === "G" ? "ok" : "falta");
-            b.style.setProperty("--i", ordem);
-            b.title = "Carteira " + numero + " - " + nome;
-            b.setAttribute("aria-pressed", "false");
-            b.setAttribute("aria-label", nome + ", carteira " + numero + " - ativa");
-            b.innerHTML = '<span class="nome"></span><span class="tampo"></span><span class="status"></span>';
-            b.querySelector(".nome").textContent = nome;
-
-            const lista = desativadas[sala] || [];
-            if (lista.includes(numero)) {
-                b.classList.add("desativada");
-                b.setAttribute("aria-pressed", "true");
-                b.setAttribute("aria-label", nome + ", carteira " + numero + " - desativada");
-            }
-
-            b.addEventListener("click", () => {
-                const off = b.classList.toggle("desativada");
-                b.setAttribute("aria-pressed", off);
-                b.setAttribute("aria-label", nome + ", carteira " + numero + (off ? " - desativada" : " - ativa"));
-
-                const atual = (desativadas[sala] || []).filter((n) => n !== numero);
-                if (off) atual.push(numero);
-                desativadas[sala] = atual;
-                salvarDesativadas();
-                const st = b.querySelector(".status");
-                st.classList.remove("troca");
-                void st.offsetWidth;
-                st.classList.add("troca");
-            });
-            return b;
-        }
-
-        function renderSala(nome_sala) {
-            blocoEsq.innerHTML = "";
-            blocoDir.innerHTML = "";
-            SALAS[nome_sala].forEach((linha, r) => {
-                [...linha].forEach((estado, c) => {
-                    const numero = r * 6 + c + 1;
-                    const ordem = r * 3 + (c % 3);
-                    const nome = NOMES[(numero - 1 + DESLOCAMENTO[nome_sala]) % NOMES.length];
-                    (c < 3 ? blocoEsq : blocoDir).appendChild(criarCarteira(nome_sala, numero, estado, ordem, nome));
-                });
-            });
-        }
-
-        // Dropdown "Salas"
-        const dropdown = document.querySelector(".nav-dropdown");
-        const toggle = dropdown.querySelector(".nav-toggle");
-
-        toggle.addEventListener("click", (e) => {
-            e.preventDefault();
-            const aberto = dropdown.classList.toggle("aberto");
-            toggle.setAttribute("aria-expanded", aberto);
-        });
-
-        dropdown.querySelectorAll(".submenu a").forEach((link) => {
-            link.addEventListener("click", (e) => {
-                e.preventDefault();
-                dropdown.querySelectorAll(".submenu a").forEach((l) => l.classList.remove("sel"));
-                link.classList.add("sel");
-                renderSala(link.dataset.sala);
-            });
-        });
-
-        const salaSolicitada = new URLSearchParams(window.location.search).get("sala");
-        const salaInicial = Object.prototype.hasOwnProperty.call(SALAS, salaSolicitada) ? salaSolicitada : "3MD";
-        dropdown.querySelectorAll(".submenu a").forEach((link) => {
-            link.classList.toggle("sel", link.dataset.sala === salaInicial);
-        });
-        renderSala(salaInicial);
-    </script>
 </body>
-
 </html>

@@ -1,4 +1,28 @@
-<?php require_once __DIR__ . '/../backend/config/auth.php'; exigirPerfil(['admin', 'coordenador', 'professor', 'aluno']); ?>
+<?php
+require_once __DIR__ . '/../backend/config/auth.php';
+exigirPerfil(['admin', 'coordenador', 'professor', 'aluno']);
+$sessao = usuarioAtual();
+$pdo = getConnection();
+$idPerfilSolicitado = filter_var($_GET['aluno'] ?? null, FILTER_VALIDATE_INT);
+$perfil = $sessao;
+if ($idPerfilSolicitado) {
+    if (!in_array($sessao['tipo_usuario'], ['admin','coordenador','professor'], true)) { http_response_code(403); exit('Acesso não autorizado.'); }
+    $stmt = $pdo->prepare("SELECT u.id_usuario,u.id_instituicao,u.nome,u.email,u.telefone,u.tipo_usuario,u.foto_perfil,GROUP_CONCAT(DISTINCT t.nome ORDER BY t.nome SEPARATOR ', ') AS turmas,GROUP_CONCAT(DISTINCT t.curso ORDER BY t.curso SEPARATOR ', ') AS cursos FROM usuarios u LEFT JOIN matriculas m ON m.id_usuario=u.id_usuario AND m.status='ativa' LEFT JOIN turmas t ON t.id_turma=m.id_turma WHERE u.id_usuario=:id AND u.tipo_usuario='aluno' GROUP BY u.id_usuario");
+    $stmt->execute([':id'=>$idPerfilSolicitado]);
+    $perfil = $stmt->fetch();
+    if (!$perfil) { http_response_code(404); exit('Aluno não encontrado.'); }
+    if ($sessao['tipo_usuario']==='professor') {
+        $permite=$pdo->prepare("SELECT 1 FROM matriculas m JOIN professor_turmas pt ON pt.id_turma=m.id_turma WHERE m.id_usuario=:aluno AND m.status='ativa' AND pt.id_professor=:professor LIMIT 1");
+        $permite->execute([':aluno'=>$idPerfilSolicitado,':professor'=>(int)$sessao['id_usuario']]);
+        if (!$permite->fetchColumn()) { http_response_code(403); exit('Aluno fora das suas turmas.'); }
+    }
+}
+$perfilNome=htmlspecialchars($perfil['nome']??'',ENT_QUOTES,'UTF-8');
+$perfilEmail=htmlspecialchars($perfil['email']??'',ENT_QUOTES,'UTF-8');
+$perfilTelefone=htmlspecialchars($perfil['telefone']??'Não informado',ENT_QUOTES,'UTF-8');
+$perfilSala=htmlspecialchars($perfil['turmas']??'Não informado',ENT_QUOTES,'UTF-8');
+$perfilCurso=htmlspecialchars($perfil['cursos']??'Não informado',ENT_QUOTES,'UTF-8');
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -18,21 +42,21 @@
 
             <div class="user-box">
                 <div class="user-avatar">
-                    <img src="imagem/perfil.png" alt="Samuel">
+                    <img src="<?= !empty($perfil['foto_perfil']) ? htmlspecialchars($perfil['foto_perfil'], ENT_QUOTES, 'UTF-8') : 'imagem/perfil.png' ?>" alt="<?= $perfilNome ?>">
                 </div>
                 <div class="user-name-wrap">
-                    <strong>Samuel Henrique Godinho da Silva </strong>
-                    <span>Aluno</span>
+                    <strong><?= $perfilNome ?></strong>
+                    <span><?= htmlspecialchars(ucfirst($perfil['tipo_usuario']??''), ENT_QUOTES, 'UTF-8') ?></span>
                 </div>
             </div>
 
             <nav class="side-nav" aria-label="Navegação principal">
 
-                <p class="nav-seguidos"><span><b>Cursos:</b></span> [Respectivo Curso]</p>
-                <p class="nav-seguidos"><span><b>Sala:</b></span> [Respectiva Sala]</p>
+                <p class="nav-seguidos"><span><b>Cursos:</b></span> <?= $perfilCurso ?></p>
+                <p class="nav-seguidos"><span><b>Sala:</b></span> <?= $perfilSala ?></p>
                 <p class="nav-seguidos"><span><b>Ponto Forte:</b></span> [Respectivo Curso]</p>
-                <p class="nav-seguidos"><span><b>Telefone:</b></span> [Respectivos Telefone]<p> [Respectiva Telefone]</p></p>
-                <p class="nav-seguidos"><span><b>E-mail:</b></span> [Respectivo E-mail]<p> [Respectivo E-mail]</p></p>
+                <p class="nav-seguidos"><span><b>Telefone:</b></span> <?= $perfilTelefone ?></p>
+                <p class="nav-seguidos"><span><b>E-mail:</b></span> <?= $perfilEmail ?></p>
                 <p class="nav-item"><img class="nav-icon" src="imagem/localização.png" alt="Curso">[Respectiva Localização]</p>
                 <p class="nav-item"><img class="nav-icon" src="imagem/github.png" alt="">[Respectivo GitHub]</p>
                 <p class="nav-item"><img class="nav-icon" src="imagem/linkedin.png" alt="">[Respectivo LinkedIn]</p>

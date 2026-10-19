@@ -1,4 +1,13 @@
-<?php require_once __DIR__ . '/../backend/config/auth.php'; exigirPerfil(['professor']); $nomeUsuario = htmlspecialchars(usuarioAtual()['nome'], ENT_QUOTES, 'UTF-8'); ?>
+<?php
+require_once __DIR__ . '/../backend/config/auth.php';
+exigirPerfil(['professor']);
+$usuario=usuarioAtual();$pdo=getConnection();$idProfessor=(int)$usuario['id_usuario'];$nomeUsuario=htmlspecialchars($usuario['nome'],ENT_QUOTES,'UTF-8');$esc=static fn($v)=>htmlspecialchars((string)$v,ENT_QUOTES,'UTF-8');
+$stmt=$pdo->prepare('SELECT COUNT(DISTINCT id_turma) FROM professor_turmas WHERE id_professor=:professor');$stmt->execute([':professor'=>$idProfessor]);$totalTurmas=(int)$stmt->fetchColumn();
+$diaSemana=(int)date('w');$stmt=$pdo->prepare('SELECT COUNT(*) FROM professor_horarios WHERE id_professor=:professor AND dia_semana=:dia');$stmt->execute([':professor'=>$idProfessor,':dia'=>$diaSemana]);$aulasHoje=(int)$stmt->fetchColumn();
+$stmt=$pdo->prepare('SELECT COUNT(*) FROM atividades WHERE id_professor=:professor AND data_entrega>=CURDATE()');$stmt->execute([':professor'=>$idProfessor]);$atividadesPendentes=(int)$stmt->fetchColumn();
+$stmt=$pdo->prepare('SELECT titulo,descricao,data_lembrete FROM lembretes_professor WHERE id_professor=:professor AND data_lembrete>=NOW() ORDER BY data_lembrete LIMIT 3');$stmt->execute([':professor'=>$idProfessor]);$lembretes=$stmt->fetchAll();
+$stmt=$pdo->prepare('SELECT h.hora_inicio,h.hora_fim,t.nome AS turma,d.nome AS disciplina FROM professor_horarios h JOIN turmas t ON t.id_turma=h.id_turma LEFT JOIN disciplinas d ON d.id_disciplina=h.id_disciplina WHERE h.id_professor=:professor ORDER BY MOD(h.dia_semana-:dia+7,7),h.hora_inicio LIMIT 2');$stmt->execute([':professor'=>$idProfessor,':dia'=>$diaSemana]);$proximasAulas=$stmt->fetchAll();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -68,7 +77,7 @@
                                 <div class="stat-icone"><img src="imagem/grupo-verde.png" alt=""></div>
                                 <div class="stat-info">
                                     <h3>Turma</h3>
-                                    <strong>5</strong>
+                                    <strong><?= $totalTurmas ?></strong>
                                     <small>Turmas ativas</small>
                                 </div>
                             </article>
@@ -76,7 +85,7 @@
                                 <div class="stat-icone"><img src="imagem/livro_01.png" alt=""></div>
                                 <div class="stat-info">
                                     <h3>Aulas de hoje</h3>
-                                    <strong>5</strong>
+                                    <strong><?= $aulasHoje ?></strong>
                                     <small>Turmas ativas</small>
                                 </div>
                             </article>
@@ -84,7 +93,7 @@
                                 <div class="stat-icone"><img src="imagem/pendentes.png" alt=""></div>
                                 <div class="stat-info">
                                     <h3>Atividades pendentes</h3>
-                                    <strong>5</strong>
+                                    <strong><?= $atividadesPendentes ?></strong>
                                     <small>Turmas ativas</small>
                                 </div>
                             </article>
@@ -131,11 +140,7 @@
 
                         <section class="card lembretes">
                             <h2><img src="imagem/lembretes.png" alt="">Lembretes pessoais</h2>
-                            <ul>
-                                <li>Foi adicionado um lembrete " Projeto integrador - data inicial " na data de 15/10</li>
-                                <li>Foi adicionado um lembrete " Projeto integrador - data final " na data de 09/12</li>
-                                <li></li>
-                            </ul>
+                            <ul><?php if($lembretes): foreach($lembretes as $lembrete): ?><li><?= $esc($lembrete['titulo']) ?> — <?= date('d/m H:i',strtotime($lembrete['data_lembrete'])) ?></li><?php endforeach; else: ?><li>Nenhum lembrete futuro.</li><?php endif; ?></ul>
                         </section>
                     </div>
 
@@ -162,16 +167,7 @@
 
                         <section class="card lateral-card">
                             <h2 class="centro"><img src="imagem/proxima-aula.png" alt="">Próximas aulas</h2>
-                            <ul class="timeline">
-                                <li>
-                                    <time>07:45</time>
-                                    <p>3MD - SOP - 4 Aulas</p>
-                                </li>
-                                <li>
-                                    <time>13:00</time>
-                                    <p>2MA - SOP - 4 Aulas</p>
-                                </li>
-                            </ul>
+                            <ul class="timeline"><?php if($proximasAulas): foreach($proximasAulas as $aula): ?><li><time><?= substr($aula['hora_inicio'],0,5) ?></time><p><?= $esc($aula['turma']) ?><?= $aula['disciplina']?' - '.$esc($aula['disciplina']):'' ?> · <?= substr($aula['hora_inicio'],0,5) ?>–<?= substr($aula['hora_fim'],0,5) ?></p></li><?php endforeach; else: ?><li><p>Nenhum horário cadastrado.</p></li><?php endif; ?></ul>
                         </section>
                     </div>
                 </div>
